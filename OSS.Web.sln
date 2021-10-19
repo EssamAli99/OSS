@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.Data", "OSS.Data\OSS.Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.Services", "OSS.Services\OSS.Services.csproj", "{D621A4F4-8C1E-490D-B4EC-901840E0F007}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.Web", "OSS.Web\OSS.Web\OSS.Web.csproj", "{1F626A2E-45DE-4881-8FD0-C67F71283EC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OSS.Web", "OSS.Web\OSS.Web.csproj", "{6877754C-6066-41C0-AFA1-1093D7C1A0B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,30 +23,15 @@ Global
 		{D621A4F4-8C1E-490D-B4EC-901840E0F007}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D621A4F4-8C1E-490D-B4EC-901840E0F007}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D621A4F4-8C1E-490D-B4EC-901840E0F007}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1F626A2E-45DE-4881-8FD0-C67F71283EC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1F626A2E-45DE-4881-8FD0-C67F71283EC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1F626A2E-45DE-4881-8FD0-C67F71283EC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1F626A2E-45DE-4881-8FD0-C67F71283EC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6877754C-6066-41C0-AFA1-1093D7C1A0B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6877754C-6066-41C0-AFA1-1093D7C1A0B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6877754C-6066-41C0-AFA1-1093D7C1A0B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6877754C-6066-41C0-AFA1-1093D7C1A0B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06029E1C-1702-42FA-A04E-5953AB9E6631}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://essamshihata.visualstudio.com/defaultcollection
-		SccProjectUniqueName0 = OSS.Data\\OSS.Data.csproj
-		SccProjectName0 = OSS.Data
-		SccLocalPath0 = OSS.Data
-		SccProjectUniqueName1 = OSS.Services\\OSS.Services.csproj
-		SccProjectName1 = OSS.Services
-		SccLocalPath1 = OSS.Services
-		SccProjectUniqueName2 = OSS.Web\\OSS.Web\\OSS.Web.csproj
-		SccProjectName2 = OSS.Web/OSS.Web
-		SccLocalPath2 = OSS.Web\\OSS.Web
-		SccLocalPath3 = .
 	EndGlobalSection
 EndGlobal
