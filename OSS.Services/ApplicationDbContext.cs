@@ -7,7 +7,6 @@ namespace OSS.Services
     public class ApplicationDbContext : IdentityDbContext
     {
         public DbSet<TestTable> TestTable { get; set; }
-        public DbSet<Person> Person { get; set; }
         public DbSet<Language> Language { get; set; }
         public DbSet<LocaleStringResource> LocaleStringResource { get; set; }
         public DbSet<AppPage> AppPage { get; set; }

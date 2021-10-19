@@ -186,7 +186,6 @@ namespace OSS.Web
             services.AddScoped<ILocalizationService, LocalizationService>();
             services.AddScoped<IValidator<TestTableModel>, TestTableValidator>();
             services.AddScoped<ITestTableService, TestTableService>();
-            services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<ICommonService, CommonService>();
             services.AddScoped<ILogger, DefaultLogger>();
             services.AddScoped<IAppPageService, AppPageService>();

@@ -75,7 +75,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\OSS.Services\OSS.Services.csproj" />
+    <ProjectReference Include="..\OSS.Services\OSS.Services.csproj" />
   </ItemGroup>
 
 </Project>

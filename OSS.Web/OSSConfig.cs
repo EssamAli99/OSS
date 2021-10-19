@@ -8,54 +8,12 @@ namespace OSS.Web
         Error,
         Warning
     }
-    public enum EditType
-    {
-        Number = 1,
-        Checkbox = 2,
-        String = 3
-    }
-    public enum RenderType
-    {
-        Text,
-        Date,
-        Boolean,
-        CheckBox,
-        Link,
-        Picture,
-        EditButton,
-        InlineEditButton,
-        ViewButton,
-        RemoveButton,
-        CustomButton
-    }
-    /// <summary>
-    /// Represents a log level
-    /// </summary>
     public enum LogLevel
     {
-        /// <summary>
-        /// Debug
-        /// </summary>
         Debug = 10,
-
-        /// <summary>
-        /// Information
-        /// </summary>
         Information = 20,
-
-        /// <summary>
-        /// Warning
-        /// </summary>
         Warning = 30,
-
-        /// <summary>
-        /// Error
-        /// </summary>
         Error = 40,
-
-        /// <summary>
-        /// Fatal
-        /// </summary>
         Fatal = 50
     }
     public struct PermissionIds
@@ -96,19 +54,8 @@ namespace OSS.Web
         public static int ScheduleTaskRunTimeout => 30 * 60;
         public struct NotifyData
         {
-            /// <summary>
-            /// Message type (success/warning/error)
-            /// </summary>
             public NotifyType Type { get; set; }
-
-            /// <summary>
-            /// Message text
-            /// </summary>
             public string Message { get; set; }
-
-            /// <summary>
-            /// Get a sets a value indicating whether the message should not be HTML encoded
-            /// </summary>
             public bool Encode { get; set; }
         }
 
