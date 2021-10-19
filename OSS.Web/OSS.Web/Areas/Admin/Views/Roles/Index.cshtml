@@ -1,0 +1,79 @@
+﻿@model IEnumerable<OSS.Web.Areas.Admin.Models.RoleModel>
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+<link href="~/lib/DataTables/css/dataTables.bootstrap4.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-md-6">
+        <b>
+            <a asp-action="Create" class="btn btn-outline-primary">@T("New")</a>
+        </b>
+    </div>
+</div>
+<div id="dvContainer">
+    <table id="dataGrid" class="table table-striped table-bordered dt-responsive" width="100%" cellspacing="0">
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            $('#dataGrid').DataTable({
+                "ajax": {
+                    "url": "@Url.Action("GetList")",
+                    "type": "POST",
+                    "deferRender": true,
+                    "datatype": "json",
+                    "contentType": "application/x-www-form-urlencoded; charset=UTF-8",
+                },
+                scrollX: true,
+                scrollY: 400,
+                info: true,
+                paging: true,
+                pagingType: 'simple_numbers',
+                pageLength: 10,
+                "serverSide": false,
+                "filter": true,
+                "processing": true,
+                "orderMulti": false,
+                "ordering": true,
+                "order": [[ 1, 'asc' ]],
+                "columnDefs": [
+                    {
+                        "targets": [0,-1],
+                        "orderable": false,
+                        "searchable": false
+                    },
+                    {
+                        "targets": [1],
+                        "orderable": true,
+                        "searchable": true
+                    },
+                 ],
+                "columns": [
+                    { "data": null,
+					  "title": "Edit",
+                      "width": 40,
+                        "render": function (data, type, row, meta) {
+                            return '<a title="Edit" class="btn btn-outline-info" href="Roles/Edit?m=' + '@OSS.Services.ModelActions.Edit' + '&id=' + row.EncrypedId + '"><i class="fa fad fa-edit"></i></a>';
+                        }
+                    },
+                    { "data": "Name", "name": "Name", "title": "@T("Name")"  },
+                    { "data": null,
+					  "title": "Delete",
+                      "width": 40,
+                        "render": function (data, type, row, meta) {
+                            return '<a title="Delete" class="btn btn-outline-danger" href="Roles/Edit?m=' +  '@OSS.Services.ModelActions.Delete' + '&id=' + row.EncrypedId + '"><i class="fa fa-trash"></i></a>';
+                        }
+                    }
+                ]
+            });
+
+        });
+    </script>
+}

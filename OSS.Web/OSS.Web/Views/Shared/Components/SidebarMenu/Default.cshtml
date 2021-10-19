@@ -1,0 +1,6 @@
+﻿@model OSS.Web.Models.SiteMapNode
+
+@foreach (var item in Model.ChildNodes.Where(x => x.Visible))
+{
+    @await Html.PartialAsync("_MenuItem", item)
+}

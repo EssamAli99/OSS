@@ -1,0 +1,21 @@
+﻿@model OSS.Web.Models.LanguageSelectorModel
+
+@inject OSS.Web.Framework.IWebHelper webHelper
+
+@if (Model.AvailableLanguages.Count > 1)
+{
+    <div style="padding-left:20px;">
+    @{
+        var returnUrl = webHelper.GetRawUrl(Context.Request);
+        var languages = Model.AvailableLanguages.Select(lang => new SelectListItem
+        {
+            Text = lang.Name,
+            Value = Url.Action("SetLanguage", "Common", new { langid = lang.Id, returnUrl }, webHelper.CurrentRequestProtocol),
+            Selected = lang.Id.Equals(Model.CurrentLanguageId)
+        });
+
+        <select id="customerlanguage" name="customerlanguage" asp-items="@languages" class="custom-select" style="padding-top:0px; padding-left:10px; padding-bottom:0px; min-width: 100px;"
+            onchange="setLocation(this.value);" aria-label="@T("Languages.Selector.Label")"></select>
+    }
+    </div>
+}

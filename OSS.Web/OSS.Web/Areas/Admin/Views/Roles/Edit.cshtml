@@ -1,0 +1,101 @@
+﻿@model OSS.Web.Areas.Admin.Models.RoleModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div>
+    <a class="btn btn-outline-warning" asp-action="Index">@T("Back")</a>
+    <strong style="padding-left: 20px">@T("Role.Details")</strong>
+</div>
+<hr />
+
+<form id="frmDetails" name="frmDetails" method="post" class="panel panel-default">
+    <div class="row">
+        <input type="hidden" asp-for="EncrypedId" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Name" class="control-label" ></label>
+                <input type="text" id="Name" name="Name" class="form-control" value="@Model.Name" 
+                       @(Model.ModelMode != OSS.Services.ModelActions.Edit && Model.ModelMode != OSS.Services.ModelActions.Add?"disabled":null)/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    @for (int i = 0; i < Model.AppPages.Count; i++)
+    {
+    <div class="row">
+        @Html.HiddenFor(m=> m.AppPages[i].Id)
+        @Html.HiddenFor(m=> m.AppPages[i].ControllerName)
+        <div class="col-md-4">
+            <span>@Model.AppPages[i].Title</span>
+        </div>
+        <div class="col-md-8">
+            @for (int j = 0; j < Model.AppPages[i].Permissions.Count; j++)
+            {
+                @Html.HiddenFor(m => m.AppPages[i].Permissions[j].Value)
+                @Html.HiddenFor(m => m.AppPages[i].Permissions[j].Selected)
+
+                @*var s = Model.AppPages[i].Permissions[j].Selected;
+                var v = Model.AppPages[i].Permissions[j].Value;
+                @if (s)
+                {
+                    @Html.CheckBoxFor(m => m.AppPages[i].Permissions[j].Selected, new { value = v, @checked = "checked" })
+                }
+                else
+                {
+                    @Html.CheckBoxFor(m => m.AppPages[i].Permissions[j].Selected, new { value = v })
+                }*@
+
+                <input type="checkbox" id="chkSelected_@(i + "_" + j)" @(Model.AppPages[i].Permissions[j].Selected ? "checked" : null) />
+                <span>&nbsp;</span>
+                <label for="chkSelected_@(i + "_" + j)">@T("Permissions." + Model.AppPages[i].Permissions[j].Text)</label>
+                <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+            }
+        </div>
+    </div>
+    }
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @if (Model.ModelMode == OSS.Services.ModelActions.Add)
+                {
+                    <input type="submit" value="@T("Save")" class="btn btn-outline-primary" asp-action="Create" />
+                }
+                @if (Model.ModelMode == OSS.Services.ModelActions.Edit)
+                {
+                    <input type="submit" value="@T("Save")" class="btn btn-outline-primary" asp-action="Edit" />
+                }
+                @if (Model.ModelMode == OSS.Services.ModelActions.Delete)
+                {
+                    <input type="submit" value="@T("Delete")" class="btn btn-outline-danger" asp-action="Delete" />
+                }
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    @{
+       if (Model.ModelMode == OSS.Services.ModelActions.Add || Model.ModelMode == OSS.Services.ModelActions.Edit) await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(function () {
+
+            if ('@(Model.ModelMode == OSS.Services.ModelActions.List || Model.ModelMode == OSS.Services.ModelActions.Delete)' == 'True') {
+                $("input[type='checkbox']").prop('disabled', true);
+            }
+
+            $("input[type='checkbox']", "#frmDetails").change(function (e) {
+                var strID = e.target.id;
+                var ids = strID.split("_");
+                var selectedId = "[name='AppPages[" + ids[1] + "].Permissions[" + ids[2] + "].Selected']";
+                $(selectedId).val($(this).is(":checked"));
+            });
+
+        });
+    </script>
+}
