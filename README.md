@@ -17,5 +17,7 @@ The project provide functions like
 
 
 I used <a href="https://www.nopcommerce.com/en">nopCommerce</a> as a reference, and tried to make my code much simpler. The code is not complete<br/>
-I included the database files (in folder App_Data) to be easier to attach, you need to change the connection string in the startup.cs file
+I included the database files (in folder App_Data) to be easier to attach, you need to change the connection string in the startup.cs file.
+<br/>
+Login user name: <b>aaa@test.com</b> and password <b>aaa123</b>
 
