@@ -1,10 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using OSS.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using OSS.Data;
 
 namespace OSS.Services
 {
@@ -19,27 +18,21 @@ namespace OSS.Services
         private readonly ApplicationDbContext _context;
 
         private DbSet<TEntity> _entities;
-        private IHttpContextAccessor _httpContextAccessor;
+        //private IHttpContextAccessor _httpContextAccessor;
         #endregion
 
         #region Ctor
 
-        public EfRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
+        public EfRepository(ApplicationDbContext context)//, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
-            var username = _httpContextAccessor.HttpContext.User.Identity.Name;
+            //_httpContextAccessor = httpContextAccessor;
         }
 
         #endregion
 
         #region Utilities
 
-        /// <summary>
-        /// Rollback of entity changes and return full error message
-        /// </summary>
-        /// <param name="exception">Exception</param>
-        /// <returns>Error message</returns>
         protected string GetFullErrorTextAndRollbackEntityChanges(DbUpdateException exception)
         {
             //rollback entity changes
@@ -59,20 +52,11 @@ namespace OSS.Services
 
         #region Methods
 
-        /// <summary>
-        /// Get entity by identifier
-        /// </summary>
-        /// <param name="id">Identifier</param>
-        /// <returns>Entity</returns>
-        public virtual TEntity GetById(int id)
+        public async virtual Task<TEntity> GetByIdAsync(int id)
         {
-            return Entities.Find(id);
+            return await Entities.FindAsync(id);
         }
 
-        /// <summary>
-        /// Insert entity
-        /// </summary>
-        /// <param name="entity">Entity</param>
         public virtual async Task InsertAsync(TEntity entity)
         {
             if (entity == null)
@@ -95,11 +79,7 @@ namespace OSS.Services
             }
         }
 
-        /// <summary>
-        /// Insert entities
-        /// </summary>
-        /// <param name="entities">Entities</param>
-        public virtual void Insert(IEnumerable<TEntity> entities)
+        public  virtual async Task InsertAsync(IEnumerable<TEntity> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
@@ -107,7 +87,7 @@ namespace OSS.Services
             try
             {
                 Entities.AddRange(entities);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateException exception)
             {
@@ -116,10 +96,6 @@ namespace OSS.Services
             }
         }
 
-        /// <summary>
-        /// Update entity
-        /// </summary>
-        /// <param name="entity">Entity</param>
         public virtual async Task UpdateAsync (TEntity entity)
         {
             if (entity == null)
@@ -137,11 +113,7 @@ namespace OSS.Services
             }
         }
 
-        /// <summary>
-        /// Update entities
-        /// </summary>
-        /// <param name="entities">Entities</param>
-        public virtual void Update(IEnumerable<TEntity> entities)
+        public virtual async Task UpdateAsync(IEnumerable<TEntity> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
@@ -149,7 +121,7 @@ namespace OSS.Services
             try
             {
                 Entities.UpdateRange(entities);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateException exception)
             {
@@ -158,11 +130,7 @@ namespace OSS.Services
             }
         }
 
-        /// <summary>
-        /// Delete entity
-        /// </summary>
-        /// <param name="entity">Entity</param>
-        public virtual void Delete(TEntity entity)
+        public virtual async Task DeleteAsync(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
@@ -172,7 +140,7 @@ namespace OSS.Services
                 Entities.Attach(entity);
                 Entities.Remove(entity);
                 _context.Entry(entity).State = EntityState.Deleted;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateException exception)
             {
@@ -181,11 +149,7 @@ namespace OSS.Services
             }
         }
 
-        /// <summary>
-        /// Delete entities
-        /// </summary>
-        /// <param name="entities">Entities</param>
-        public virtual void Delete(IEnumerable<TEntity> entities)
+        public virtual async Task DeleteAsync(IEnumerable<TEntity> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
@@ -193,7 +157,7 @@ namespace OSS.Services
             try
             {
                 Entities.RemoveRange(entities);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateException exception)
             {
@@ -207,19 +171,10 @@ namespace OSS.Services
 
         #region Properties
 
-        /// <summary>
-        /// Gets a table
-        /// </summary>
         public virtual IQueryable<TEntity> Table => Entities;
 
-        /// <summary>
-        /// Gets a table with "no tracking" enabled (EF feature) Use it only when you load record(s) only for read-only operations
-        /// </summary>
         public virtual IQueryable<TEntity> TableNoTracking => Entities.AsNoTracking();
 
-        /// <summary>
-        /// Gets an entity set
-        /// </summary>
         protected virtual DbSet<TEntity> Entities
         {
             get

@@ -1,32 +1,34 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OSS.Data.Entities;
 using OSS.Services.AppServices;
 using OSS.Services.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OSS.Services.DomainServices
 {
     public class LanguageService : ILanguageService
     {
-        private readonly ApplicationDbContext _ctx;
+        private readonly IRepository<Language> _repository;
         private readonly ICacheManager _cacheManager;
-        public LanguageService(ApplicationDbContext ctx, ICacheManager cacheManager)
+        public LanguageService(IRepository<Language> ctx, ICacheManager cacheManager)
         {
-            _ctx = ctx;
+            _repository = ctx;
             _cacheManager = cacheManager;
         }
-        public List<LanguageModel> GetLanguages()
+        public async Task<List<LanguageModel>> GetLanguagesAsync()
         {
-            return _cacheManager.Get(OSSDefaults.LanguagesAllCacheKey, () =>
+            return await _cacheManager.Get(OSSDefaults.LanguagesAllCacheKey, async () =>
             {
-                return _ctx.Language.AsNoTracking()
+                return await _repository.TableNoTracking
                     .OrderBy(a => a.DisplayOrder)
                     .Select(a => new LanguageModel
                     {
                         Id = a.Id,
                         Name = a.Name
                     })
-                    .ToList();
+                    .ToListAsync();
             });
         }
     }

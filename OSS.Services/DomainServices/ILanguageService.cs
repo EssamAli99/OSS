@@ -1,10 +1,11 @@
 ﻿using OSS.Services.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OSS.Services.DomainServices
 {
     public interface ILanguageService
     {
-        List<LanguageModel> GetLanguages();
+        Task<List<LanguageModel>> GetLanguagesAsync();
     }
 }

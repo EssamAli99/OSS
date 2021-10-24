@@ -3,6 +3,7 @@ using OSS.Services.Models;
 using OSS.Web.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OSS.Web.Framework
 {
@@ -15,9 +16,9 @@ namespace OSS.Web.Framework
             _appPageService = appPageService;
             _languageService = languageService;
         }
-        public virtual LanguageSelectorModel PrepareLanguageSelectorModel(int currentLangId)
+        public virtual async Task<LanguageSelectorModel> PrepareLanguageSelectorModel(int currentLangId)
         {
-            var availableLanguages = _languageService.GetLanguages();
+            var availableLanguages = await _languageService.GetLanguagesAsync();
 
             return new LanguageSelectorModel
             {
@@ -26,10 +27,10 @@ namespace OSS.Web.Framework
             };
 
         }
-        public SiteMapNode PrepareSideMenu(string allowedPaged)
+        public async Task<SiteMapNode> PrepareSideMenu(string allowedPaged)
         {
             var result = new SiteMapNode();
-            var allPages = _appPageService.GetAppPages(allowedPaged);
+            var allPages = await _appPageService.GetAppPagesAsync(allowedPaged);
             var parents = allPages.Where(x => x.AppPageId == null).OrderBy(a => a.PageOrder).ToList();
             foreach (var p in parents)
             {

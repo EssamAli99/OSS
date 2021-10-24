@@ -11,33 +11,32 @@ namespace OSS.Services.AppServices
     public partial class DefaultLogger : ILogger
     {
 
-        private readonly ApplicationDbContext _ctx;
-        public DefaultLogger(ApplicationDbContext ctx)
+        private readonly IRepository<Log> _ctx;
+        public DefaultLogger(IRepository<Log> ctx)
         {
             _ctx = ctx;
         }
-        private Log GetEntity(string encryptedId)
+        private async Task<Log> GetEntity(string encryptedId)
         {
             //TODO: add data protection encrypt and decrypt
             int Id = 0;
             if (!string.IsNullOrEmpty(encryptedId)) Int32.TryParse(encryptedId, out Id);
-            if (Id > 0) return _ctx.Log.Find(Id);
+            if (Id > 0) return await _ctx.GetByIdAsync(Id);
             return null;
         }
-        public virtual void Delete(string id)
+        public virtual async Task Delete(string id)
         {
-            var log = GetEntity(id);
+            var log = await GetEntity(id);
             if (log == null) throw new ArgumentNullException(nameof(log));
 
-            _ctx.Log.Remove(log);
-            _ctx.SaveChanges();
+            await _ctx.DeleteAsync(log);
         }
 
         public virtual IPagedList<Log> GetAllLogs(DateTime? fromUtc = null, DateTime? toUtc = null,
             string message = "", int? logLevel = null,
             int pageIndex = 0, int pageSize = int.MaxValue)
         {
-            var query = _ctx.Log.AsNoTracking();
+            var query = _ctx.TableNoTracking;
             if (fromUtc.HasValue)
                 query = query.Where(l => fromUtc.Value <= l.CreatedOnUtc);
             if (toUtc.HasValue)
@@ -55,9 +54,9 @@ namespace OSS.Services.AppServices
             return new PagedList<Log>(query, pageIndex, pageSize);
         }
 
-        public virtual LogModel PrepareModel(string logId)
+        public virtual async Task<LogModel> PrepareModel(string logId)
         {
-            var log = GetEntity(logId);
+            var log = await GetEntity(logId);
             if (log != null)
             {
                 return new LogModel
@@ -78,28 +77,29 @@ namespace OSS.Services.AppServices
 
         }
 
-        public virtual IList<Log> GetLogByIds(int[] logIds)
+        public virtual async Task<IList<Log>> GetLogByIds(int[] logIds)
         {
             if (logIds == null || logIds.Length == 0)
                 return new List<Log>();
 
-            var query = from l in _ctx.Log.AsNoTracking()
+            var query = from l in _ctx.TableNoTracking
                         where logIds.Contains(l.Id)
                         select l;
-            var logItems = query.ToList();
-            //sort by passed identifiers
-            var sortedLogItems = new List<Log>();
-            foreach (var id in logIds)
-            {
-                var log = logItems.Find(x => x.Id == id);
-                if (log != null)
-                    sortedLogItems.Add(log);
-            }
+            return await query.ToListAsync();
+            
+            ////sort by passed identifiers
+            //var sortedLogItems = new List<Log>();
+            //foreach (var id in logIds)
+            //{
+            //    var log = logItems.Find(x => x.Id == id);
+            //    if (log != null)
+            //        sortedLogItems.Add(log);
+            //}
 
-            return sortedLogItems;
+            //return sortedLogItems;
         }
 
-        public virtual int Insert(LogModel model)
+        public virtual async Task<int> Insert(LogModel model)
         {
             if (model == null || string.IsNullOrEmpty(model?.ShortMessage)) return 0;
 
@@ -115,16 +115,15 @@ namespace OSS.Services.AppServices
                 CreatedOnUtc = DateTime.UtcNow
             };
 
-            _ctx.Add(log);
-            _ctx.SaveChanges();
+            await _ctx.InsertAsync(log);
 
             return log.Id;
         }
 
-        public virtual IList<LogModel> GetAll(DateTime? fromUtc = null, DateTime? toUtc = null, string userid = "",
+        public virtual async Task<IList<LogModel>> GetAll(DateTime? fromUtc = null, DateTime? toUtc = null, string userid = "",
                 int? logLevel = null, string message = "")
         {
-            var query = _ctx.Log.Include(x=> x.User).AsNoTracking();
+            var query = _ctx.TableNoTracking.Include(x=> x.User).AsQueryable();
             if (fromUtc.HasValue)
                 query = query.Where(l => fromUtc.Value <= l.CreatedOnUtc);
             if (toUtc.HasValue)
@@ -141,7 +140,7 @@ namespace OSS.Services.AppServices
             //query = query.OrderByDescending(l => l.CreatedOnUtc);
             query = query.OrderByDescending(l => l.Id);
 
-            var logs = query.Select(x => new LogModel
+            var logs = await query.Select(x => new LogModel
             {
                 CreatedOnUtc = x.CreatedOnUtc,
                 FullMessage = x.FullMessage,
@@ -155,16 +154,15 @@ namespace OSS.Services.AppServices
                 CreatedOn = x.CreatedOnUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm"),
                 Email = x.User.Email,
                 ModelMode = ModelActions.List
-            }).ToList();
+            }).ToListAsync();
 
             return logs;
         }
 
         public async Task ClearLogAsync()
         {
-            var lst = _ctx.Log.OrderBy(x=> x.Id).Take(100);
-            _ctx.RemoveRange(lst);
-            await _ctx.SaveChangesAsync();
+            var lst = _ctx.Table.OrderBy(x=> x.Id).Take(100);
+            await _ctx.DeleteAsync(lst);
         }
 
     }

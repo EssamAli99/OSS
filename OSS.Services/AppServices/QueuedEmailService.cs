@@ -15,30 +15,25 @@ namespace OSS.Services.AppServices
     {
         #region Fields
 
-        private readonly ApplicationDbContext _ctx;
+        private readonly IRepository<QueuedEmail> _repository;
 
         #endregion
 
         #region Ctor
 
-        public QueuedEmailService(ApplicationDbContext ctx)
+        public QueuedEmailService(IRepository<QueuedEmail> ctx)
         {
-            _ctx = ctx;
+            _repository = ctx;
         }
 
         #endregion
 
         #region Methods
 
-        /// <summary>
-        /// Inserts a queued email
-        /// </summary>
-        /// <param name="queuedEmail">Queued email</param>        
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task InsertQueuedEmailAsync(QueuedEmailModel model)
         {
             if (model == null) throw new NullReferenceException("queued email model is null");
-            await _ctx.QueuedEmail.AddAsync(new QueuedEmail
+            await _repository.InsertAsync(new QueuedEmail
             {
                 AttachedDownloadId = model.AttachedDownloadId,
                 AttachmentFileName = model.AttachmentFileName,
@@ -58,21 +53,15 @@ namespace OSS.Services.AppServices
                 To = model.To,
                 ToName = model.ToName
             });
-            await _ctx.SaveChangesAsync();
         }
 
         private async Task<QueuedEmail> GetEntity(string encryptedId)
         {
             //TODO: add data protection encrypt and decrypt
             int Id = Int32.Parse(encryptedId);
-            return await _ctx.QueuedEmail.FindAsync(Id);
+            return await _repository.GetByIdAsync(Id);
         }
 
-        /// <summary>
-        /// Updates a queued email
-        /// </summary>
-        /// <param name="queuedEmail">Queued email</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task UpdateQueuedEmailAsync(QueuedEmailModel model)
         {
             var entity = await GetEntity(model.EncrypedId);
@@ -98,37 +87,22 @@ namespace OSS.Services.AppServices
             entity.SentOnUtc = DateTime.UtcNow;
             entity.SentTries = model.SentTries;
 
-            await _ctx.SaveChangesAsync();
+            await _repository.UpdateAsync(entity);
         }
-
-        /// <summary>
-        /// Deleted a queued email
-        /// </summary>
-        /// <param name="queuedEmail">Queued email</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
         public virtual async Task DeleteQueuedEmailAsync(QueuedEmailModel model)
         {
             var entity = await GetEntity(model.EncrypedId);
             if (entity != null)
             {
-                _ctx.QueuedEmail.Remove(entity);
-                await _ctx.SaveChangesAsync();
+                await _repository.DeleteAsync(entity);
             }
         }
 
-        /// <summary>
-        /// Gets a queued email by identifier
-        /// </summary>
-        /// <param name="queuedEmailId">Queued email identifier</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the queued email
-        /// </returns>
         public virtual async Task<QueuedEmailModel> GetQueuedEmailByIdAsync(string queuedEmailId)
         {
             if (int.TryParse(queuedEmailId, out int id))
             {
-                var entity = await _ctx.QueuedEmail.FindAsync(id);
+                var entity = await _repository.GetByIdAsync(id);
                 if (entity != null)
                 {
                     return new QueuedEmailModel
@@ -161,18 +135,10 @@ namespace OSS.Services.AppServices
             return null;
         }
 
-        /// <summary>
-        /// Get queued emails by identifiers
-        /// </summary>
-        /// <param name="queuedEmailIds">queued email identifiers</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the queued emails
-        /// </returns>
         public virtual async Task<IList<QueuedEmailModel>> GetQueuedEmailsByIdsAsync(string[] queuedEmailIds)
         {
             int[] ids = queuedEmailIds.Select(x => int.Parse(x)).ToArray();
-            return await _ctx.QueuedEmail.AsNoTracking().Where(x => ids.Contains(x.Id))
+            return await _repository.TableNoTracking.Where(x => ids.Contains(x.Id))
                 .Select(entity => new QueuedEmailModel
                 {
                     AttachedDownloadId = entity.AttachedDownloadId,
@@ -200,23 +166,6 @@ namespace OSS.Services.AppServices
                 }).ToListAsync();
         }
 
-        /// <summary>
-        /// Gets all queued emails
-        /// </summary>
-        /// <param name="fromEmail">From Email</param>
-        /// <param name="toEmail">To Email</param>
-        /// <param name="createdFromUtc">Created date from (UTC); null to load all records</param>
-        /// <param name="createdToUtc">Created date to (UTC); null to load all records</param>
-        /// <param name="loadNotSentItemsOnly">A value indicating whether to load only not sent emails</param>
-        /// <param name="loadOnlyItemsToBeSent">A value indicating whether to load only emails for ready to be sent</param>
-        /// <param name="maxSendTries">Maximum send tries</param>
-        /// <param name="loadNewest">A value indicating whether we should sort queued email descending; otherwise, ascending.</param>
-        /// <param name="pageIndex">Page index</param>
-        /// <param name="pageSize">Page size</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the email item list
-        /// </returns>
         public virtual async Task<IPagedList<QueuedEmailModel>> SearchEmailsAsync(string fromEmail,
             string toEmail, DateTime? createdFromUtc, DateTime? createdToUtc,
             bool loadNotSentItemsOnly, bool loadOnlyItemsToBeSent, int maxSendTries,
@@ -225,7 +174,7 @@ namespace OSS.Services.AppServices
             fromEmail = (fromEmail ?? string.Empty).Trim();
             toEmail = (toEmail ?? string.Empty).Trim();
 
-            var query = _ctx.QueuedEmail.AsNoTracking();
+            var query = _repository.TableNoTracking;
             if (!string.IsNullOrEmpty(fromEmail))
                 query = query.Where(qe => qe.From.Contains(fromEmail));
             if (!string.IsNullOrEmpty(toEmail))
@@ -274,24 +223,14 @@ namespace OSS.Services.AppServices
                     ModelMode = ModelActions.Edit,
                     SentOnUtc = entity.SentOnUtc,
                     SentTries = entity.SentTries
-                })
-                .ToListAsync();
+                }).ToListAsync();
 
             return new PagedList<QueuedEmailModel>(queuedEmails, pageIndex, pageSize);
         }
 
-        /// <summary>
-        /// Deletes already sent emails
-        /// </summary>
-        /// <param name="createdFromUtc">Created date from (UTC); null to load all records</param>
-        /// <param name="createdToUtc">Created date to (UTC); null to load all records</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the number of deleted emails
-        /// </returns>
         public virtual async Task<int> DeleteAlreadySentEmailsAsync(DateTime? createdFromUtc, DateTime? createdToUtc)
         {
-            var query = _ctx.QueuedEmail.AsNoTracking();
+            var query = _repository.TableNoTracking;
 
             // only sent emails
             query = query.Where(qe => qe.SentOnUtc.HasValue);
@@ -303,7 +242,7 @@ namespace OSS.Services.AppServices
 
             var emails = await query.ToArrayAsync();
 
-            _ctx.QueuedEmail.RemoveRange(emails);
+            await _repository.DeleteAsync(emails);
 
             return emails.Length;
         }

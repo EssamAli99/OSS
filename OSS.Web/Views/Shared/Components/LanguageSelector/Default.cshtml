@@ -10,7 +10,7 @@
         var languages = Model.AvailableLanguages.Select(lang => new SelectListItem
         {
             Text = lang.Name,
-            Value = Url.Action("SetLanguage", "Common", new { langid = lang.Id, returnUrl }, webHelper.CurrentRequestProtocol),
+            Value = Url.Action("SetLanguage", "Common", new { langid = lang.Id, returnUrl, area="" }, webHelper.CurrentRequestProtocol),
             Selected = lang.Id.Equals(Model.CurrentLanguageId)
         });
 

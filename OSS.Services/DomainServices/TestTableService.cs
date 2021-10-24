@@ -12,19 +12,19 @@ namespace OSS.Services.DomainServices
 {
     public class TestTableService : ITestTableService
     {
-        private readonly ApplicationDbContext _ctx;
-        public TestTableService(ApplicationDbContext ctx)
+        private readonly IRepository<TestTable> _repository;
+        public TestTableService(IRepository<TestTable> ctx)
         {
-            _ctx = ctx;
+            _repository = ctx;
         }
 
         public async Task<int> GetTotal(Func<TestTableModel, bool> where)
         {
-            return await _ctx.TestTable.CountAsync();
+            return await _repository.TableNoTracking.CountAsync();
         }
         public async Task<IEnumerable<TestTableModel>> PrepareModeListAsync(Func<TestTable, bool>? where)
         {
-            var query = _ctx.TestTable.AsNoTracking();
+            var query = _repository.TableNoTracking;
             if (where != null) query = query.Where(where).AsQueryable();
             return await query.Select(x => x.ToModel<TestTableModel>()).ToListAsync();
         }
@@ -35,7 +35,7 @@ namespace OSS.Services.DomainServices
             int pageSize = 5;
             string orderBy = "";
             string orderDir = "asc";
-            var query = _ctx.TestTable.AsQueryable().AsNoTracking();
+            var query = _repository.TableNoTracking;
             if (param != null && param.Any())
             {
                 if (param.Any(x=> x.Key == "start"))
@@ -106,7 +106,7 @@ namespace OSS.Services.DomainServices
         {
             //TODO: add data protection encrypt and decrypt
             int Id = Int32.Parse(encryptedId);
-            return await _ctx.TestTable.FindAsync(Id);
+            return await _repository.GetByIdAsync(Id);
         }
         public async Task<TestTableModel> PrepareMode(string encryptedId)
         {
@@ -141,22 +141,20 @@ namespace OSS.Services.DomainServices
 
             if (string.IsNullOrEmpty(model.EncrypedId))
             {
-                _ctx.TestTable.Add(entity);
+                await _repository.InsertAsync(entity);
                 model.EncrypedId = entity.Id.ToString();
             }
             else
             {
-                _ctx.TestTable.Update(entity);
+                await _repository.UpdateAsync(entity);
             }
-            await _ctx.SaveChangesAsync();
             return model;
 
         }
         public async Task Delete(string encryptedId)
         {
             var entity = await GetEntity(encryptedId);
-            _ctx.TestTable.Remove(entity);
-            await _ctx.SaveChangesAsync();
+            await _repository.DeleteAsync(entity);
         }
 
     }

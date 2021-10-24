@@ -1,47 +1,53 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OSS.Data.Entities;
 using OSS.Services.AppServices;
 using OSS.Services.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OSS.Services.DomainServices
 {
     public class AppPageService : IAppPageService
     {
-        private readonly ApplicationDbContext _ctx;
+        private readonly IRepository<AppPage> _repository;
         private readonly ICacheManager _cacheManager;
-        public AppPageService(ApplicationDbContext ctx, ICacheManager cacheManager)
+        public AppPageService(IRepository<AppPage> ctx, ICacheManager cacheManager)
         {
-            _ctx = ctx;
+            _repository = ctx;
             _cacheManager = cacheManager;
         }
-        public List<AppPageModel> GetAppPages(string allowedPaged)
+
+        public async Task<List<AppPageModel>> GetAppPagesAsync(string allowedPaged)
         {
-            var pages = _cacheManager.Get(OSSDefaults.ApplicationPagesCacheKey, () =>
+            var pages = await _cacheManager.Get(OSSDefaults.ApplicationPagesCacheKey, async () =>
             {
-                return _ctx.AppPage.Include(x => x.AppPageActions).AsNoTracking().OrderBy(a => a.PageOrder).ToList();
+                return await _repository.TableNoTracking.Include(x => x.AppPageActions).OrderBy(a => a.PageOrder).ToListAsync();
             });
 
-            return pages.Where(x => allowedPaged.Contains(x.SystemName))
-                .Select(x => new AppPageModel
-                {
-                    Id = x.Id,
-                    ActionName = x.ActionName,
-                    AppPageId = x.AppPageId,
-                    ControllerName = x.ControllerName,
-                    IconClass = x.IconClass,
-                    PageOrder = x.PageOrder,
-                    PermissionNames = x.PermissionNames,
-                    SystemName = x.SystemName,
-                    Title = x.Title,
-                    AreaName = x.AreaName
-                }).ToList();
-        }
-        public List<AppPageModel> GetAppPages()
-        {
-            var pages = _cacheManager.Get(OSSDefaults.ApplicationPagesCacheKey, () =>
+            pages = pages.Where(x => allowedPaged.Contains(x.SystemName)).ToList();
+            
+            return pages.Select(x => new AppPageModel
             {
-                return _ctx.AppPage.Include(x=> x.AppPageActions).AsNoTracking().OrderBy(a => a.PageOrder).ToList();
+                Id = x.Id,
+                ActionName = x.ActionName,
+                AppPageId = x.AppPageId,
+                ControllerName = x.ControllerName,
+                IconClass = x.IconClass,
+                PageOrder = x.PageOrder,
+                PermissionNames = x.PermissionNames,
+                SystemName = x.SystemName,
+                Title = x.Title,
+                AreaName = x.AreaName
+            }).ToList();
+
+        }
+
+        public async Task<List<AppPageModel>> GetAppPagesAsync()
+        {
+            var pages = await _cacheManager.Get(OSSDefaults.ApplicationPagesCacheKey, async () =>
+            {
+                return await _repository.TableNoTracking.Include(x => x.AppPageActions).OrderBy(a => a.PageOrder).ToListAsync();
             });
 
             return pages.Select(x => new AppPageModel
@@ -57,6 +63,7 @@ namespace OSS.Services.DomainServices
                 Title = x.Title,
                 AreaName = x.AreaName
             }).ToList();
+
         }
     }
 }

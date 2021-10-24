@@ -62,9 +62,10 @@ namespace OSS.Web.Areas.Admin.Controllers
             return Ok(jsonData);
         }
         
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var pages = _appPageService.GetAppPages().Where(x => !string.IsNullOrEmpty(x.ControllerName));
+            var pages = await _appPageService.GetAppPagesAsync();
+            pages = pages.Where(x => !string.IsNullOrEmpty(x.ControllerName)).ToList();
             var model = new RoleModel
             {
                 ModelMode = ModelActions.Add,
@@ -115,7 +116,8 @@ namespace OSS.Web.Areas.Admin.Controllers
             var role = _roleManager.Roles.FirstOrDefault(x => x.Id == id);
             if (role == null) return NotFound();
             var claims = await _roleManager.GetClaimsAsync(role);
-            var pages = _appPageService.GetAppPages().Where(x=> !string.IsNullOrEmpty(x.ControllerName));
+            var pages = await _appPageService.GetAppPagesAsync();
+            pages = pages.Where(x=> !string.IsNullOrEmpty(x.ControllerName)).ToList();
             var model = new RoleModel
             {
                 EncrypedId = role.Id,

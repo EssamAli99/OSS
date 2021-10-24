@@ -1,21 +1,21 @@
 using OSS.Data.Entities;
 using System.Collections.Generic;
-
+using System.Threading.Tasks;
 
 namespace OSS.Services.AppServices
 {
     public partial interface ILocalizationService
     {
         public int WorkingLanguageId { get; set; }
-        void DeleteLocaleStringResource(LocaleStringResource localeStringResource);
-        LocaleStringResource GetLocaleStringResourceById(int localeStringResourceId);
-        LocaleStringResource GetLocaleStringResourceByName(string resourceName);
-        LocaleStringResource GetLocaleStringResourceByName(string resourceName, int languageId,
+        Task DeleteLocaleStringResource(LocaleStringResource localeStringResource);
+        Task<LocaleStringResource> GetLocaleStringResourceById(int localeStringResourceId);
+        Task<LocaleStringResource> GetLocaleStringResourceByName(string resourceName);
+        Task<LocaleStringResource> GetLocaleStringResourceByName(string resourceName, int languageId,
             bool logIfNotFound = true);
 
-        IList<LocaleStringResource> GetAllResources(int languageId);
-        void InsertLocaleStringResource(LocaleStringResource localeStringResource);
-        void UpdateLocaleStringResource(LocaleStringResource localeStringResource);
+        Task<IList<LocaleStringResource>> GetAllResources(int languageId);
+        Task InsertLocaleStringResource(LocaleStringResource localeStringResource);
+        Task UpdateLocaleStringResource(LocaleStringResource localeStringResource);
         Dictionary<string, KeyValuePair<int, string>> GetAllResourceValues(int languageId, bool? loadPublicLocales);
 
         string GetResource(string resourceKey, int languageId,

@@ -12,15 +12,15 @@ namespace OSS.Services.AppServices
     {
         #region Fields
 
-        private readonly ApplicationDbContext _ctx;
+        private readonly IRepository<EmailAccount> _repository;
 
         #endregion
 
         #region Ctor
 
-        public EmailAccountService(ApplicationDbContext ctx)
+        public EmailAccountService(IRepository<EmailAccount> ctx)
         {
-            _ctx = ctx;
+            _repository = ctx;
         }
 
         #endregion
@@ -31,14 +31,14 @@ namespace OSS.Services.AppServices
         {
             //TODO: add data protection encrypt and decrypt
             int Id = Int32.Parse(encryptedId);
-            return await _ctx.EmailAccount.FindAsync(Id);
+            return await _repository.GetByIdAsync(Id);
         }
 
         public virtual async Task InsertAsync(EmailAccountModel model)
         {
             if (model == null)  throw new ArgumentNullException(nameof(model));
 
-            await _ctx.EmailAccount.AddAsync(new EmailAccount
+            await _repository.InsertAsync(new EmailAccount
             {
                 Email = model.Email.Trim(),
                 DisplayName = model.DisplayName.Trim(),
@@ -46,7 +46,6 @@ namespace OSS.Services.AppServices
                 Username = model.Username.Trim(),
                 Password = model.Password.Trim(),
             });
-            await _ctx.SaveChangesAsync();
         }
 
         public virtual async Task UpdateAsync(EmailAccountModel model)
@@ -61,8 +60,7 @@ namespace OSS.Services.AppServices
                 entity.Username = model.Username.Trim();
                 entity.Password = model.Password.Trim();
 
-                _ctx.EmailAccount.Update(entity);
-                await _ctx.SaveChangesAsync();
+                await _repository.UpdateAsync(entity);
             }
         }
 
@@ -76,8 +74,7 @@ namespace OSS.Services.AppServices
             var entity = await GetEntity(model.EncrypedId);
             if (entity != null)
             {
-                _ctx.EmailAccount.Remove(entity);
-                await _ctx.SaveChangesAsync();
+                await _repository.DeleteAsync(entity);
             }
         }
 
@@ -105,7 +102,7 @@ namespace OSS.Services.AppServices
 
         public virtual async Task<IList<EmailAccountModel>> GetAllAsync()
         {
-            return await _ctx.EmailAccount.AsNoTracking()
+            return await _repository.TableNoTracking
                 .Select(x=> new EmailAccountModel
                 {
                     DisplayName = x.DisplayName,
@@ -118,13 +115,12 @@ namespace OSS.Services.AppServices
                     Port = x.Port,
                     UseDefaultCredentials = x.UseDefaultCredentials,
                     Username = x.Username
-                })
-                .ToListAsync();
+                }).ToListAsync();
         }
 
         public async Task<EmailAccountModel> GetDefaultEmailAsync()
         {
-            return await _ctx.EmailAccount.AsNoTracking().OrderBy(x => x.Id)
+            return await _repository.TableNoTracking.OrderBy(x => x.Id)
                 .Select(x => new EmailAccountModel
                 {
                     DisplayName = x.DisplayName,
@@ -137,8 +133,7 @@ namespace OSS.Services.AppServices
                     Port = x.Port,
                     UseDefaultCredentials = x.UseDefaultCredentials,
                     Username = x.Username
-                })
-                .FirstOrDefaultAsync();
+                }).FirstOrDefaultAsync();
         }
 
         #endregion

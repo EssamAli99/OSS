@@ -3,6 +3,7 @@ using OSS.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OSS.Services.AppServices
 {
@@ -13,16 +14,16 @@ namespace OSS.Services.AppServices
     {
         #region Fields
 
-        private readonly ApplicationDbContext _ctx;
+        private readonly IRepository<LocaleStringResource> _repository;
         private readonly ICacheManager _cacheManager;
         public int WorkingLanguageId { get; set; }
         #endregion
 
         #region Ctor
 
-        public LocalizationService(ApplicationDbContext ctx, ICacheManager cacheManager)
+        public LocalizationService(IRepository<LocaleStringResource> ctx, ICacheManager cacheManager)
         {
-            this._ctx = ctx;
+            this._repository = ctx;
             this._cacheManager = cacheManager;
         }
 
@@ -34,14 +35,13 @@ namespace OSS.Services.AppServices
         /// Insert resources
         /// </summary>
         /// <param name="resources">Resources</param>
-        protected virtual void InsertLocaleStringResources(IList<LocaleStringResource> resources)
+        protected virtual async Task InsertLocaleStringResources(IList<LocaleStringResource> resources)
         {
             if (resources == null)
                 throw new ArgumentNullException(nameof(resources));
 
             //insert
-            _ctx.LocaleStringResource.AddRange(resources);
-            _ctx.SaveChanges();
+            await _repository.InsertAsync(resources);
             //cache
             _cacheManager.RemoveByPattern(OSSDefaults.LocaleStringResourcesPatternCacheKey);
 
@@ -51,14 +51,13 @@ namespace OSS.Services.AppServices
         /// Update resources
         /// </summary>
         /// <param name="resources">Resources</param>
-        protected virtual void UpdateLocaleStringResources(IList<LocaleStringResource> resources)
+        protected virtual async Task UpdateLocaleStringResources(IList<LocaleStringResource> resources)
         {
             if (resources == null)
                 throw new ArgumentNullException(nameof(resources));
 
             //update
-            _ctx.LocaleStringResource.UpdateRange(resources);
-            _ctx.SaveChanges();
+            await _repository.UpdateAsync(resources);
             //cache
             _cacheManager.RemoveByPattern(OSSDefaults.LocaleStringResourcesPatternCacheKey);
 
@@ -86,13 +85,12 @@ namespace OSS.Services.AppServices
         /// Deletes a locale string resource
         /// </summary>
         /// <param name="localeStringResource">Locale string resource</param>
-        public virtual void DeleteLocaleStringResource(LocaleStringResource localeStringResource)
+        public virtual async Task DeleteLocaleStringResource(LocaleStringResource localeStringResource)
         {
             if (localeStringResource == null)
                 throw new ArgumentNullException(nameof(localeStringResource));
 
-            _ctx.LocaleStringResource.Remove(localeStringResource);
-            _ctx.SaveChanges();
+            await _repository.DeleteAsync(localeStringResource);
             //cache
             _cacheManager.RemoveByPattern(OSSDefaults.LocaleStringResourcesPatternCacheKey);
 
@@ -103,12 +101,12 @@ namespace OSS.Services.AppServices
         /// </summary>
         /// <param name="localeStringResourceId">Locale string resource identifier</param>
         /// <returns>Locale string resource</returns>
-        public virtual LocaleStringResource GetLocaleStringResourceById(int localeStringResourceId)
+        public virtual async Task<LocaleStringResource> GetLocaleStringResourceById(int localeStringResourceId)
         {
             if (localeStringResourceId == 0)
                 return null;
 
-            return _ctx.LocaleStringResource.Find(localeStringResourceId);
+            return await _repository.GetByIdAsync(localeStringResourceId);
         }
 
         /// <summary>
@@ -116,9 +114,9 @@ namespace OSS.Services.AppServices
         /// </summary>
         /// <param name="resourceName">A string representing a resource name</param>
         /// <returns>Locale string resource</returns>
-        public virtual LocaleStringResource GetLocaleStringResourceByName(string resourceName)
+        public virtual async Task<LocaleStringResource> GetLocaleStringResourceByName(string resourceName)
         {
-                return GetLocaleStringResourceByName(resourceName, WorkingLanguageId);
+                return await GetLocaleStringResourceByName(resourceName, WorkingLanguageId);
         }
 
         /// <summary>
@@ -128,16 +126,14 @@ namespace OSS.Services.AppServices
         /// <param name="languageId">Language identifier</param>
         /// <param name="logIfNotFound">A value indicating whether to log error if locale string resource is not found</param>
         /// <returns>Locale string resource</returns>
-        public virtual LocaleStringResource GetLocaleStringResourceByName(string resourceName, int languageId,
+        public virtual async Task<LocaleStringResource> GetLocaleStringResourceByName(string resourceName, int languageId,
             bool logIfNotFound = true)
         {
-            var query = from lsr in _ctx.LocaleStringResource.AsNoTracking()
+            var query = from lsr in _repository.TableNoTracking
                         orderby lsr.ResourceName
                         where lsr.LanguageId == languageId && lsr.ResourceName == resourceName
                         select lsr;
-            var localeStringResource = query.FirstOrDefault();
-
-            return localeStringResource;
+            return await query.FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -145,27 +141,25 @@ namespace OSS.Services.AppServices
         /// </summary>
         /// <param name="languageId">Language identifier</param>
         /// <returns>Locale string resources</returns>
-        public virtual IList<LocaleStringResource> GetAllResources(int languageId)
+        public virtual async Task<IList<LocaleStringResource>> GetAllResources(int languageId)
         {
-            var query = from l in _ctx.LocaleStringResource.AsNoTracking()
+            var query = from l in _repository.TableNoTracking
                         orderby l.ResourceName
                         where l.LanguageId == languageId
                         select l;
-            var locales = query.ToList();
-            return locales;
+            return await query.ToListAsync();
         }
 
         /// <summary>
         /// Inserts a locale string resource
         /// </summary>
         /// <param name="localeStringResource">Locale string resource</param>
-        public virtual void InsertLocaleStringResource(LocaleStringResource localeStringResource)
+        public virtual async Task InsertLocaleStringResource(LocaleStringResource localeStringResource)
         {
             if (localeStringResource == null)
                 throw new ArgumentNullException(nameof(localeStringResource));
 
-            _ctx.LocaleStringResource.Add(localeStringResource);
-            _ctx.SaveChanges();
+            await _repository.InsertAsync(localeStringResource);
             //cache
             _cacheManager.RemoveByPattern(OSSDefaults.LocaleStringResourcesPatternCacheKey);
 
@@ -175,13 +169,12 @@ namespace OSS.Services.AppServices
         /// Updates the locale string resource
         /// </summary>
         /// <param name="localeStringResource">Locale string resource</param>
-        public virtual void UpdateLocaleStringResource(LocaleStringResource localeStringResource)
+        public virtual async Task UpdateLocaleStringResource(LocaleStringResource localeStringResource)
         {
             if (localeStringResource == null)
                 throw new ArgumentNullException(nameof(localeStringResource));
 
-            _ctx.LocaleStringResource.Update(localeStringResource);
-            _ctx.SaveChanges();
+            await _repository.UpdateAsync(localeStringResource);
             //cache
             _cacheManager.RemoveByPattern(OSSDefaults.LocaleStringResourcesPatternCacheKey);
 
@@ -204,7 +197,7 @@ namespace OSS.Services.AppServices
                 {
                     //we use no tracking here for performance optimization
                     //anyway records are loaded only for read-only operations
-                    var query = from l in _ctx.LocaleStringResource.AsNoTracking()
+                    var query = from l in _repository.TableNoTracking
                                 orderby l.ResourceName
                                 where l.LanguageId == languageId
                                 select l;
@@ -226,7 +219,7 @@ namespace OSS.Services.AppServices
             {
                 //we use no tracking here for performance optimization
                 //anyway records are loaded only for read-only operations
-                var query = from l in _ctx.LocaleStringResource.AsNoTracking()
+                var query = from l in _repository.TableNoTracking
                             orderby l.ResourceName
                             where l.LanguageId == languageId
                             select l;
@@ -276,7 +269,7 @@ namespace OSS.Services.AppServices
                 var key = string.Format(OSSDefaults.LocaleStringResourcesByResourceNameCacheKey, languageId, resourceKey);
                 var lsr = _cacheManager.Get(key, () =>
                 {
-                    var query = from l in _ctx.LocaleStringResource.AsNoTracking()
+                    var query = from l in _repository.TableNoTracking
                                 where l.ResourceName == resourceKey
                                 && l.LanguageId == languageId
                                 select l.ResourceValue;

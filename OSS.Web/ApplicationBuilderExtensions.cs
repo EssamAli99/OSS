@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OSS.Services;
 using OSS.Services.AppServices;
 using OSS.Services.DomainServices;
 using OSS.Services.Models;
@@ -183,6 +184,7 @@ namespace OSS.Web
             services.AddSingleton<IWorkContext, WorkContext>();
             services.AddSingleton<IWebHelper, WebHelper>();
             services.AddSingleton<ILocker, MemoryCacheManager>();
+            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<ILocalizationService, LocalizationService>();
             services.AddScoped<IValidator<TestTableModel>, TestTableValidator>();
             services.AddScoped<ITestTableService, TestTableService>();

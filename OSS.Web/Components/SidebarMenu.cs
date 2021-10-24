@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OSS.Web.Framework;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OSS.Web.Components
 {
@@ -11,7 +12,7 @@ namespace OSS.Web.Components
         {
             _cModelFactory = cModelFactory;
         }
-        public IViewComponentResult Invoke(int? productThumbPictureSize)
+        public async Task<IViewComponentResult> InvokeAsync(int? productThumbPictureSize)
         {
             var allowedPages = "";
             if (this.UserClaimsPrincipal != null && this.UserClaimsPrincipal.Claims != null && this.UserClaimsPrincipal.Claims.Count () > 0)
@@ -19,7 +20,7 @@ namespace OSS.Web.Components
                 allowedPages = this.UserClaimsPrincipal.Claims.Where(c=> c.Type == "AllowedPages").FirstOrDefault().Value;
             }
 
-            var model = _cModelFactory.PrepareSideMenu(allowedPages);
+            var model = await _cModelFactory.PrepareSideMenu(allowedPages);
 
             return View(model);
         }

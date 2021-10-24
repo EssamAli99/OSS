@@ -5,6 +5,7 @@ using OSS.Services.Models;
 using OSS.Web.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OSS.Web.Areas.Admin.Controllers
 {
@@ -22,7 +23,7 @@ namespace OSS.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetList()
+        public async Task<IActionResult> GetList()
         {
             //if (!AllowedPermissions.Contains(Permissions.READ)) return StatusCode(403);
             var q = this.Request.Query; // if called with get
@@ -45,7 +46,7 @@ namespace OSS.Web.Areas.Admin.Controllers
                     });
             }
             //var data = _service.PrepareModePagedList(param);
-            var data = _Logger.GetAll();
+            var data = await _Logger.GetAll();
             var count = data.Count();
             if (param != null && param.Any(x => x.Key == "draw"))
             {
@@ -61,10 +62,10 @@ namespace OSS.Web.Areas.Admin.Controllers
             return Ok(jsonData);
 
         }
-        public IActionResult Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
             //if (!AllowedPermissions.Contains(Permissions.DELET)) return StatusCode(403);
-            var log = _Logger.PrepareModel(id);
+            var log = await _Logger.PrepareModel(id);
             if (log == null) return NotFound();
             log.ModelMode = ModelActions.Delete;
             return View("Edit", log);

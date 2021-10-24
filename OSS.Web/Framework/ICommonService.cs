@@ -1,11 +1,11 @@
-﻿using OSS.Services.Models;
-using OSS.Web.Models;
+﻿using OSS.Web.Models;
+using System.Threading.Tasks;
 
 namespace OSS.Web.Framework
 {
     public interface ICommonService
     {
-        SiteMapNode PrepareSideMenu(string allowedPaged);
-        LanguageSelectorModel PrepareLanguageSelectorModel(int currentLangId);
+        Task<SiteMapNode> PrepareSideMenu(string allowedPaged);
+        Task<LanguageSelectorModel> PrepareLanguageSelectorModel(int currentLangId);
     }
 }

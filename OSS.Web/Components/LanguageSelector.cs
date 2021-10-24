@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OSS.Web.Framework;
+using System.Threading.Tasks;
 
 namespace OSS.Web.Components
 {
@@ -14,9 +15,9 @@ namespace OSS.Web.Components
             _workContext = workContext;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
-            var model = _commonModelFactory.PrepareLanguageSelectorModel(_workContext.WorkingLanguageId);
+            var model = await _commonModelFactory.PrepareLanguageSelectorModel(_workContext.WorkingLanguageId);
 
             if (model.AvailableLanguages.Count == 1)
                 return Content("");
