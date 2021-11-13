@@ -13,6 +13,7 @@ The project provide functions like
   <li>Schedule Tasks (tasks configured in database)</li>
   <li>Localization (using database)</li>
   <li>Flixable way to handle permissions (admin can create roles and give different permissions on any page)</li>
+  <li>Unit test</li>
 </ul>
 
 
