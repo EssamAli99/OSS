@@ -36,7 +36,7 @@ namespace OSS.Services.AppServices
 
         public virtual async Task InsertAsync(EmailAccountModel model)
         {
-            if (model == null)  throw new ArgumentNullException(nameof(model));
+            if (model == null) throw new ArgumentNullException(nameof(model));
 
             await _repository.InsertAsync(new EmailAccount
             {
@@ -50,9 +50,9 @@ namespace OSS.Services.AppServices
 
         public virtual async Task UpdateAsync(EmailAccountModel model)
         {
-            if (model == null)  throw new ArgumentNullException(nameof(model));
+            if (model == null) throw new ArgumentNullException(nameof(model));
             var entity = await GetEntity(model.EncrypedId);
-            if ( entity != null)
+            if (entity != null)
             {
                 entity.Email = model.Email.Trim();
                 entity.DisplayName = model.DisplayName.Trim();
@@ -66,7 +66,7 @@ namespace OSS.Services.AppServices
 
         public virtual async Task DeleteAsync(EmailAccountModel model)
         {
-            if (model == null)  throw new ArgumentNullException(nameof(model));
+            if (model == null) throw new ArgumentNullException(nameof(model));
 
             if ((await GetAllAsync()).Count == 1)
                 throw new Exception("You cannot delete this email account. At least one account is required.");
@@ -103,7 +103,7 @@ namespace OSS.Services.AppServices
         public virtual async Task<IList<EmailAccountModel>> GetAllAsync()
         {
             return await _repository.TableNoTracking
-                .Select(x=> new EmailAccountModel
+                .Select(x => new EmailAccountModel
                 {
                     DisplayName = x.DisplayName,
                     Email = x.Email,

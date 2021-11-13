@@ -15,9 +15,9 @@ namespace OSS.Web.Components
         public async Task<IViewComponentResult> InvokeAsync(int? productThumbPictureSize)
         {
             var allowedPages = "";
-            if (this.UserClaimsPrincipal != null && this.UserClaimsPrincipal.Claims != null && this.UserClaimsPrincipal.Claims.Count () > 0)
+            if (this.UserClaimsPrincipal != null && this.UserClaimsPrincipal.Claims != null && this.UserClaimsPrincipal.Claims.Count() > 0)
             {
-                allowedPages = this.UserClaimsPrincipal.Claims.Where(c=> c.Type == "AllowedPages").FirstOrDefault().Value;
+                allowedPages = this.UserClaimsPrincipal.Claims.Where(c => c.Type == "AllowedPages").FirstOrDefault().Value;
             }
 
             var model = await _cModelFactory.PrepareSideMenu(allowedPages);

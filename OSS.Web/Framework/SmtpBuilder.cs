@@ -33,7 +33,7 @@ namespace OSS.Web.Framework
         {
             if (emailAccount is null)
             {
-                emailAccount = await _emailAccountService.GetDefaultEmailAsync()?? throw new Exception("Email account could not be loaded");
+                emailAccount = await _emailAccountService.GetDefaultEmailAsync() ?? throw new Exception("Email account could not be loaded");
             }
 
             var client = new SmtpClient
@@ -62,7 +62,7 @@ namespace OSS.Web.Framework
             catch (Exception ex)
             {
                 client.Dispose();
-                throw ;
+                throw;
             }
         }
 

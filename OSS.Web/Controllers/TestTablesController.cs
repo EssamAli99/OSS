@@ -13,7 +13,7 @@ namespace OSS.Web.Controllers
     {
         private readonly ITestTableService _service;
 
-        public TestTablesController(ITestTableService service) 
+        public TestTablesController(ITestTableService service)
         {
             _service = service;
         }

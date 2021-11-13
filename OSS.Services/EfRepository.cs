@@ -65,21 +65,21 @@ namespace OSS.Services
             try
             {
                 Entities.Add(entity);
-               // _context.Entry(entity).State = EntityState.Added;
-                 await _context.SaveChangesAsync();
+                // _context.Entry(entity).State = EntityState.Added;
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateException exception)
             {
                 //ensure that the detailed error text is saved in the Log
                 throw new Exception(GetFullErrorTextAndRollbackEntityChanges(exception), exception);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.Error.WriteLine(ex);
             }
         }
 
-        public  virtual async Task InsertAsync(IEnumerable<TEntity> entities)
+        public virtual async Task InsertAsync(IEnumerable<TEntity> entities)
         {
             if (entities == null)
                 throw new ArgumentNullException(nameof(entities));
@@ -96,7 +96,7 @@ namespace OSS.Services
             }
         }
 
-        public virtual async Task UpdateAsync (TEntity entity)
+        public virtual async Task UpdateAsync(TEntity entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));

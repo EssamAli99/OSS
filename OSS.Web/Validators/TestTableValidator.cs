@@ -16,7 +16,7 @@ namespace OSS.Web.Validators
 
             RuleFor(x => x.Text2)
                 .NotNull().WithMessage(localizationService.GetResource("this is required", langId))
-                .Length(1,5).WithMessage(localizationService.GetResource("from 1 to 5", langId));
+                .Length(1, 5).WithMessage(localizationService.GetResource("from 1 to 5", langId));
         }
     }
 }

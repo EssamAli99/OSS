@@ -59,7 +59,7 @@ namespace OSS.Web
                         var webHelper = scope.ServiceProvider.GetService<IWebHelper>();
                         var m = new LogModel
                         {
-                            FullMessage = exception?.ToString()?? "",
+                            FullMessage = exception?.ToString() ?? "",
                             LogLevelId = (int)LogLevel.Error,
                             ShortMessage = exception?.Message,
                             UserId = userId,
@@ -140,7 +140,7 @@ namespace OSS.Web
             var taskService = scope.ServiceProvider.GetService<IScheduleTaskService>();
             var client = scope.ServiceProvider.GetService<IHttpClientFactory>();
             var logger = scope.ServiceProvider.GetService<ILogger>();
-            
+
             TaskManagerInstance = new TaskManager(taskService, client, logger);
             TaskManagerInstance.Initialize();
             TaskManagerInstance.Start();

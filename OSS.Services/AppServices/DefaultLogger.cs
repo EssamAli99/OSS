@@ -86,7 +86,7 @@ namespace OSS.Services.AppServices
                         where logIds.Contains(l.Id)
                         select l;
             return await query.ToListAsync();
-            
+
             ////sort by passed identifiers
             //var sortedLogItems = new List<Log>();
             //foreach (var id in logIds)
@@ -123,7 +123,7 @@ namespace OSS.Services.AppServices
         public virtual async Task<IList<LogModel>> GetAll(DateTime? fromUtc = null, DateTime? toUtc = null, string userid = "",
                 int? logLevel = null, string message = "")
         {
-            var query = _ctx.TableNoTracking.Include(x=> x.User).AsQueryable();
+            var query = _ctx.TableNoTracking.Include(x => x.User).AsQueryable();
             if (fromUtc.HasValue)
                 query = query.Where(l => fromUtc.Value <= l.CreatedOnUtc);
             if (toUtc.HasValue)
@@ -136,7 +136,7 @@ namespace OSS.Services.AppServices
             if (!string.IsNullOrEmpty(userid)) query = query.Where(l => l.UserId == userid);
             if (!string.IsNullOrEmpty(message))
                 query = query.Where(l => l.ShortMessage.Contains(message) || l.FullMessage.Contains(message));
-            
+
             //query = query.OrderByDescending(l => l.CreatedOnUtc);
             query = query.OrderByDescending(l => l.Id);
 
@@ -161,7 +161,7 @@ namespace OSS.Services.AppServices
 
         public async Task ClearLogAsync()
         {
-            var lst = _ctx.Table.OrderBy(x=> x.Id).Take(100);
+            var lst = _ctx.Table.OrderBy(x => x.Id).Take(100);
             await _ctx.DeleteAsync(lst);
         }
 

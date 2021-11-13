@@ -12,9 +12,9 @@ namespace OSS.Web.Mvc.Filters
         {
             //if (filterContext.HttpContext.Request.UrlReferrer == null || filterContext.HttpContext.Request.Url.Host != filterContext.HttpContext.Request.UrlReferrer.Host)
             var h = filterContext.HttpContext.Request.Headers;
-            Microsoft.Extensions.Primitives.StringValues hValue ;
+            Microsoft.Extensions.Primitives.StringValues hValue;
             h.TryGetValue("Referer", out hValue);
-            if (!h.Keys.Contains("Referer")  || string.IsNullOrEmpty(hValue))
+            if (!h.Keys.Contains("Referer") || string.IsNullOrEmpty(hValue))
             {
                 filterContext.Result = new RedirectToRouteResult(new
                                RouteValueDictionary(new { controller = "Home", action = "Index" }));

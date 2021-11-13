@@ -17,7 +17,7 @@ namespace OSS.Web.Areas.Admin.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IAppPageService _appPageService;
 
-        public RolesController(RoleManager<IdentityRole> rm, IAppPageService aps) 
+        public RolesController(RoleManager<IdentityRole> rm, IAppPageService aps)
         {
             _roleManager = rm;
             _appPageService = aps;
@@ -61,7 +61,7 @@ namespace OSS.Web.Areas.Admin.Controllers
             };
             return Ok(jsonData);
         }
-        
+
         public async Task<IActionResult> Create()
         {
             var pages = await _appPageService.GetAppPagesAsync();
@@ -117,7 +117,7 @@ namespace OSS.Web.Areas.Admin.Controllers
             if (role == null) return NotFound();
             var claims = await _roleManager.GetClaimsAsync(role);
             var pages = await _appPageService.GetAppPagesAsync();
-            pages = pages.Where(x=> !string.IsNullOrEmpty(x.ControllerName)).ToList();
+            pages = pages.Where(x => !string.IsNullOrEmpty(x.ControllerName)).ToList();
             var model = new RoleModel
             {
                 EncrypedId = role.Id,
@@ -134,7 +134,7 @@ namespace OSS.Web.Areas.Admin.Controllers
                     {
                         Text = OSSConfig.PermissionNames[y],
                         Value = y,
-                        Disabled = (m == ModelActions.Delete || m == ModelActions.List) ,
+                        Disabled = (m == ModelActions.Delete || m == ModelActions.List),
                         Selected = (claims.FirstOrDefault(c => c.Type.Equals(x.ControllerName) && c.Value.Contains(y)) != null)
                     }).ToList()
                 }).ToList()

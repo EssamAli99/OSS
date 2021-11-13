@@ -10,7 +10,8 @@ namespace OSS.Web.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder)
         {
-            builder.ConfigureServices((context, services) => {
+            builder.ConfigureServices((context, services) =>
+            {
                 services.Configure<IdentityOptions>(options =>
                 {
                     // Default Lockout settings.

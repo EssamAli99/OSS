@@ -26,7 +26,7 @@ namespace OSS.Services.DomainServices
             });
 
             pages = pages.Where(x => allowedPaged.Contains(x.SystemName)).ToList();
-            
+
             return pages.Select(x => new AppPageModel
             {
                 Id = x.Id,

@@ -71,8 +71,8 @@ namespace OSS.Web.Framework
                 }
                 catch (Exception ex)
                 {
-                   // var serviceScopeFactory = EngineContext.Current.Resolve<IServiceScopeFactory>();
-                   // using var scope = serviceScopeFactory.CreateScope();
+                    // var serviceScopeFactory = EngineContext.Current.Resolve<IServiceScopeFactory>();
+                    // using var scope = serviceScopeFactory.CreateScope();
                     // Resolve
                     //var logger = _context.HttpContext.RequestServices.GetService(typeof(ILogger)) as ILogger; //EngineContext.Current.Resolve<ILogger>(scope);
                     //var localizationService = _context.HttpContext.RequestServices.GetService(typeof(ILocalizationService)) as ILocalizationService; // EngineContext.Current.Resolve<ILocalizationService>(scope);
@@ -83,7 +83,7 @@ namespace OSS.Web.Framework
 
                     _logger.Insert(new LogModel
                     {
-                        FullMessage = ex?.ToString()?? "",
+                        FullMessage = ex?.ToString() ?? "",
                         LogLevelId = (int)LogLevel.Error,
                         ShortMessage = message,
                         UserId = userId,

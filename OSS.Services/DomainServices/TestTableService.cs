@@ -38,10 +38,10 @@ namespace OSS.Services.DomainServices
             var query = _repository.TableNoTracking;
             if (param != null && param.Any())
             {
-                if (param.Any(x=> x.Key == "start"))
+                if (param.Any(x => x.Key == "start"))
                 {
                     var aaa = param.FirstOrDefault(x => x.Key == "start");
-                     _ = int.TryParse(aaa.Value, out start);
+                    _ = int.TryParse(aaa.Value, out start);
                 }
 
                 if (param.Any(x => x.Key == "length"))
@@ -49,17 +49,17 @@ namespace OSS.Services.DomainServices
                     var aaa = param.FirstOrDefault(x => x.Key == "length");
                     _ = int.TryParse(aaa.Value, out pageSize);
                 }
-                if (param.Any(x=> x.Key == "order[0][column]"))
+                if (param.Any(x => x.Key == "order[0][column]"))
                 {
                     var aaa = param.FirstOrDefault(x => x.Key == "order[0][column]");
                     if (aaa.Value != "0")
                     {
                         orderBy = aaa.Value;
-                        if (param.Any(x=> x.Key == "order[0][dir]"))
+                        if (param.Any(x => x.Key == "order[0][dir]"))
                             orderDir = param.FirstOrDefault(x => x.Key == "order[0][dir]").Value;
                     }
                 }
-                if (param.Any(x=> x.Key == "search[value]"))
+                if (param.Any(x => x.Key == "search[value]"))
                 {
                     var aaa = param.FirstOrDefault(x => x.Key == "search[value]").Value;
                     if (!string.IsNullOrEmpty(aaa)) query = query.Where(x => x.Text1.Contains(aaa) || x.Text2.Contains(aaa));
@@ -72,7 +72,7 @@ namespace OSS.Services.DomainServices
                 if (orderDir == "asc") query = query.OrderBy(x => x.Text1);
                 else query = query.OrderByDescending(x => x.Text1);
             }
-            return await query.Select(x=> x.ToModel<TestTableModel>()).ToListAsync();
+            return await query.Select(x => x.ToModel<TestTableModel>()).ToListAsync();
 
             //--------------------------------------------------- 
             ///

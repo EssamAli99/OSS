@@ -13,11 +13,11 @@ namespace OSS.Web.Localization
         /// Ctor
         /// </summary>
         /// <param name="localized">Localized value</param>
-        public LocalizedString(string localized): base (localized)
+        public LocalizedString(string localized) : base(localized)
         {
             _localized = localized;
         }
-        
+
         /// <summary>
         /// Text
         /// </summary>

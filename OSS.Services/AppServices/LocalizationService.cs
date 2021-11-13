@@ -116,7 +116,7 @@ namespace OSS.Services.AppServices
         /// <returns>Locale string resource</returns>
         public virtual async Task<LocaleStringResource> GetLocaleStringResourceByName(string resourceName)
         {
-                return await GetLocaleStringResourceByName(resourceName, WorkingLanguageId);
+            return await GetLocaleStringResourceByName(resourceName, WorkingLanguageId);
         }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace OSS.Services.AppServices
                     result = lsr;
             }
 
-            if (!string.IsNullOrEmpty(result)) 
+            if (!string.IsNullOrEmpty(result))
                 return result;
 
             if (!string.IsNullOrEmpty(defaultValue))

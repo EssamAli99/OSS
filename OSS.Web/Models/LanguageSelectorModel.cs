@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace OSS.Web.Models
 {
-    public partial class LanguageSelectorModel 
+    public partial class LanguageSelectorModel
     {
         public LanguageSelectorModel()
         {
