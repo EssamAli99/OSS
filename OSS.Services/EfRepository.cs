@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OSS.Data;
+using OSS.Services.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +17,17 @@ namespace OSS.Services
         #region Fields
 
         private readonly ApplicationDbContext _context;
-
+        private readonly EventHandlerContainer _eventPublisher;
         private DbSet<TEntity> _entities;
         //private IHttpContextAccessor _httpContextAccessor;
         #endregion
 
         #region Ctor
 
-        public EfRepository(ApplicationDbContext context)//, IHttpContextAccessor httpContextAccessor)
+        public EfRepository(ApplicationDbContext context, EventHandlerContainer eventPublisher)//, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _eventPublisher = eventPublisher;
             //_httpContextAccessor = httpContextAccessor;
         }
 
@@ -67,6 +69,7 @@ namespace OSS.Services
                 Entities.Add(entity);
                 // _context.Entry(entity).State = EntityState.Added;
                 await _context.SaveChangesAsync();
+                await _eventPublisher.PublishAsync(new EntityInsertedEvent<BaseEntity>(entity));
             }
             catch (DbUpdateException exception)
             {
@@ -105,6 +108,7 @@ namespace OSS.Services
             {
                 Entities.Update(entity);
                 await _context.SaveChangesAsync();
+                await _eventPublisher.PublishAsync(new EntityUpdatedEvent<BaseEntity>(entity));
             }
             catch (DbUpdateException exception)
             {
@@ -141,6 +145,7 @@ namespace OSS.Services
                 Entities.Remove(entity);
                 _context.Entry(entity).State = EntityState.Deleted;
                 await _context.SaveChangesAsync();
+                await _eventPublisher.PublishAsync(new EntityDeletedEvent<BaseEntity>(entity));
             }
             catch (DbUpdateException exception)
             {

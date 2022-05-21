@@ -125,7 +125,7 @@ namespace OSS.Web
                 });
 
             ApplicationBuilderExtensions.StartScheduleTasks(app);
-
+            
         }
     }
 }

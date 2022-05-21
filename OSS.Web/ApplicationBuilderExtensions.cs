@@ -5,10 +5,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OSS.Data;
 using OSS.Services;
 using OSS.Services.AppServices;
 using OSS.Services.DomainServices;
+using OSS.Services.Events;
 using OSS.Services.Models;
+using OSS.Web.Controllers;
 using OSS.Web.Framework;
 using OSS.Web.Validators;
 using System.Net.Http;
@@ -144,6 +147,7 @@ namespace OSS.Web
             TaskManagerInstance = new TaskManager(taskService, client, logger);
             TaskManagerInstance.Initialize();
             TaskManagerInstance.Start();
+
         }
 
         /// <summary>
@@ -197,6 +201,18 @@ namespace OSS.Web
             services.AddScoped<ISmtpBuilder, SmtpBuilder>();
             services.AddScoped<IOSSFileProvider, OSSFileProvider>();
             services.AddScoped<IScheduleTaskService, ScheduleTaskService>();
+
+            //events
+            services.AddScoped<EventHandlerContainer>();
+            services.AddScoped(typeof(IEventHandler<>), typeof(EntityEventHandler<>));
+            services.AddScoped(typeof(EntityInsertedEvent<>), typeof(EntityEventHandler<>));
+            services.AddScoped(typeof(EntityUpdatedEvent<>), typeof(EntityEventHandler<>));
+            services.AddScoped(typeof(EntityDeletedEvent<>), typeof(EntityEventHandler<>));
+
+            EventHandlerContainer.Subscribe<EntityInsertedEvent<BaseEntity>, IEventHandler<EntityInsertedEvent<BaseEntity>>>();
+            EventHandlerContainer.Subscribe<EntityUpdatedEvent<BaseEntity>, IEventHandler<EntityUpdatedEvent<BaseEntity>>>();
+            EventHandlerContainer.Subscribe<EntityDeletedEvent<BaseEntity>, IEventHandler<EntityDeletedEvent<BaseEntity>>>();
+
         }
     }
 }
