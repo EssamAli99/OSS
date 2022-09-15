@@ -10,6 +10,7 @@ using OSS.Services;
 using OSS.Services.AppServices;
 using OSS.Services.DomainServices;
 using OSS.Services.Events;
+using OSS.Services.ExportImport;
 using OSS.Services.Models;
 using OSS.Web.Controllers;
 using OSS.Web.Framework;
@@ -201,6 +202,7 @@ namespace OSS.Web
             services.AddScoped<ISmtpBuilder, SmtpBuilder>();
             services.AddScoped<IOSSFileProvider, OSSFileProvider>();
             services.AddScoped<IScheduleTaskService, ScheduleTaskService>();
+            services.AddScoped<IExportManager, ExportManager>();
 
             //events
             services.AddScoped<EventHandlerContainer>();

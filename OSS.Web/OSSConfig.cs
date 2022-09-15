@@ -22,7 +22,7 @@ namespace OSS.Web
         public const string INSERT = "2";
         public const string UPDATE = "3";
         public const string DELET = "4";
-        public const string APPROVE = "5";
+        public const string EXPORT = "5";
         public const string REJECT = "6";
     }
     public struct Permission
@@ -65,7 +65,7 @@ namespace OSS.Web
             { "2", "INSERT" },
             { "3", "UPDATE" },
             { "4", "DELETE" },
-            { "5", "APPROVE" },
+            { "5", "EXPORT" },
             { "6", "REJECT" },
         };
 
@@ -108,10 +108,10 @@ namespace OSS.Web
             },
             new Permission
             {
-                Id = PermissionIds.APPROVE,
-                Name = "APPROVE",
-                ActionName = "Approve",
-                HtmlElementId = "btnApprove"
+                Id = PermissionIds.EXPORT,
+                Name = "EXPORT",
+                ActionName = "Export",
+                HtmlElementId = "btnExport"
             },
             new Permission
             {

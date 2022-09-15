@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "defaultProvider": "cdnjs",
+  "defaultProvider": "unpkg",
   "libraries": [
     {
       "library": "datatables@1.10.21",
