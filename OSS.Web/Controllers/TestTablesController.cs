@@ -4,7 +4,6 @@ using OSS.Services.DomainServices;
 using OSS.Services.ExportImport;
 using OSS.Services.Models;
 using OSS.Web.Models;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,40 +29,15 @@ namespace OSS.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> GetList()
         {
-            var q = this.Request.Query; // if called with get
-            var f = this.Request.Form; // if called with post
-            var currentPage = 1;
-            IEnumerable<KeyValuePair<string, string>> param = null;
-            if (q.Any())
+            var param = GetParameters();
+            var data = await _service.PrepareModePagedList(param, true);
+            return Ok(new BasePagedListModel<TestTableModel>
             {
-                param = q.Select(x =>
-                {
-                    return new KeyValuePair<string, string>(x.Key, x.Value.ToString());
-                });
-            }
-            else
-            {
-                if (f.Any())
-                    param = f.Select(x =>
-                    {
-                        return new KeyValuePair<string, string>(x.Key, x.Value.ToString());
-                    });
-            }
-            //var data = _service.PrepareModePagedList(param);
-            var data = await _service.PrepareModeListAsync(null);
-            var count = await _service.GetTotal(null);
-            if (param != null && param.Any(x => x.Key == "draw"))
-            {
-                currentPage = int.Parse(param.FirstOrDefault(x => x.Key == "draw").Value);
-            }
-            var jsonData = new BasePagedListModel<TestTableModel>
-            {
-                draw = currentPage.ToString(),
-                recordsFiltered = count,
-                recordsTotal = count,
-                data = data
-            };
-            return Ok(jsonData);
+                draw = data.PageIndex.ToString(),
+                recordsFiltered = data.PageSize,
+                recordsTotal = data.Count,
+                data = data.ToList()
+            });
 
         }
 
@@ -129,7 +103,7 @@ namespace OSS.Web.Controllers
         //[HttpPost]
         public async Task<IActionResult> Export()
         {
-            var lst = await _service.PrepareModeListAsync(null);
+            var lst = await _service.PrepareModePagedList(null, true);
             if (lst == null) return NotFound();
             var bytes = await _exportservice.ExportTestTablesToXlsxAsync(lst.ToList());
             return File(bytes, MimeTypes.TextXlsx, "TestTables.xlsx");

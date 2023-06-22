@@ -77,10 +77,10 @@ namespace OSS.Tests.ServicesTests.DomainServicesTests
         [Test]
         public async Task Service_PrepareMode_Return_List()
         {
-            var list = await _service.PrepareModeListAsync(null);
+            var list = await _service.PrepareModePagedList(null,true);
             Assert.NotNull(list);
 
-            Assert.AreEqual(entities.Count, list.Count());
+            Assert.AreEqual(entities.Count, list.Count);
         }
 
         [Test]

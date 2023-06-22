@@ -3,7 +3,6 @@ using OSS.Services;
 using OSS.Services.AppServices;
 using OSS.Services.Models;
 using OSS.Web.Models;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,29 +24,11 @@ namespace OSS.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> GetList()
         {
-            //if (!AllowedPermissions.Contains(Permissions.READ)) return StatusCode(403);
-            var q = this.Request.Query; // if called with get
-            var f = this.Request.Form; // if called with post
-            var currentPage = 1;
-            IEnumerable<KeyValuePair<string, string>> param = null;
-            if (q.Any())
-            {
-                param = q.Select(x =>
-                {
-                    return new KeyValuePair<string, string>(x.Key, x.Value.ToString());
-                });
-            }
-            else
-            {
-                if (f.Any())
-                    param = f.Select(x =>
-                    {
-                        return new KeyValuePair<string, string>(x.Key, x.Value.ToString());
-                    });
-            }
+            var param = GetParameters();
             //var data = _service.PrepareModePagedList(param);
             var data = await _Logger.GetAll();
             var count = data.Count();
+            var currentPage = 1;
             if (param != null && param.Any(x => x.Key == "draw"))
             {
                 currentPage = int.Parse(param.FirstOrDefault(x => x.Key == "draw").Value);

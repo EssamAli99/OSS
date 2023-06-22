@@ -5,7 +5,6 @@ using OSS.Services;
 using OSS.Services.DomainServices;
 using OSS.Web.Areas.Admin.Models;
 using OSS.Web.Models;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -30,17 +29,8 @@ namespace OSS.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult GetList()
         {
-            //if (!AllowedPermissions.Contains(Permissions.READ)) return StatusCode(403);
-            var f = this.Request.Form;
+            var param = GetParameters();
             var currentPage = 1;
-            IEnumerable<KeyValuePair<string, string>> param = null;
-
-            if (f.Any())
-                param = f.Select(x =>
-                {
-                    return new KeyValuePair<string, string>(x.Key, x.Value.ToString());
-                });
-
             var lst = _roleManager.Roles.ToList();
             if (param != null && param.Any(x => x.Key == "draw"))
             {

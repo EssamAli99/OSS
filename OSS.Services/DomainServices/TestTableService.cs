@@ -18,26 +18,26 @@ namespace OSS.Services.DomainServices
             _repository = ctx;
         }
 
-        public async Task<int> GetTotal(Func<TestTableModel, bool> where)
+        public async Task<int> GetTotal(Func<TestTable, bool> where)
         {
             return await _repository.TableNoTracking.CountAsync();
         }
-        public async Task<IEnumerable<TestTableModel>> PrepareModeListAsync(Func<TestTable, bool>? where)
-        {
-            var query = _repository.TableNoTracking;
-            if (where != null) query = query.Where(where).AsQueryable();
-            return await query.Select(x => x.ToModel<TestTableModel>()).ToListAsync();
-        }
 
-        public async Task<IList<TestTableModel>> PrepareModePagedList(Dictionary<string, string> param)
+        public async Task<IPagedList<TestTableModel>> PrepareModePagedList(Dictionary<string, string> param, bool all = false)
         {
             int start = 0;
-            int pageSize = 5;
+            int pageSize = 10;
             string orderBy = "";
             string orderDir = "asc";
+            var currentPage = 1;
+            Func<TestTable, bool> where = null;
             var query = _repository.TableNoTracking;
             if (param != null && param.Any())
             {
+                if (param != null && param.Any(x => x.Key == "draw"))
+                {
+                    currentPage = int.Parse(param.FirstOrDefault(x => x.Key == "draw").Value);
+                }
                 if (param.Any(x => x.Key == "start"))
                 {
                     var aaa = param.FirstOrDefault(x => x.Key == "start");
@@ -62,18 +62,23 @@ namespace OSS.Services.DomainServices
                 if (param.Any(x => x.Key == "search[value]"))
                 {
                     var aaa = param.FirstOrDefault(x => x.Key == "search[value]").Value;
-                    if (!string.IsNullOrEmpty(aaa)) query = query.Where(x => x.Text1.Contains(aaa) || x.Text2.Contains(aaa));
+                    where = x => x.Text1.Contains(aaa) || x.Text2.Contains(aaa);
+                    if (!string.IsNullOrEmpty(aaa)) query = query.Where(where).AsQueryable();
                 }
             }
 
-            //query = query.Skip(start).Take(pageSize);
             if (!string.IsNullOrEmpty(orderBy))
             {
                 if (orderDir == "asc") query = query.OrderBy(x => x.Text1);
                 else query = query.OrderByDescending(x => x.Text1);
             }
-            return await query.Select(x => x.ToModel<TestTableModel>()).ToListAsync();
 
+            if (all)
+            {
+                var data = await query.Select(x => x.ToModel<TestTableModel>()).ToListAsync();
+                return new PagedList<TestTableModel>(data, currentPage, pageSize, data.Count);
+            }
+            return new PagedList<TestTableModel>(query.Select(x => x.ToModel<TestTableModel>()), currentPage, pageSize);
             //--------------------------------------------------- 
             ///
             /// write your expression

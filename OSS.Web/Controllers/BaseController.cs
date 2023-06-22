@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OSS.Web.Mvc.Filters;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OSS.Web.Controllers
 {
@@ -8,6 +10,30 @@ namespace OSS.Web.Controllers
     [AuthorizeAction]
     public class BaseController : Controller
     {
+        protected Dictionary<string, string> GetParameters()
+        {
+            var q = Request.Query; // if called with get
+            var f = Request.Form; // if called with post
+            //IEnumerable<KeyValuePair<string, string>> param = null;
+            if (q.Any())
+            {
+                return q.ToDictionary(x => x.Key, x=> x.Value.ToString());
+                //param = q.Select(x =>
+                //{
+                //    return new KeyValuePair<string, string>(x.Key, x.Value.ToString());
+                //});
+            }
+            else
+            {
+                if (f.Any())
+                    return f.ToDictionary(x => x.Key, x => x.Value.ToString());
+                //param = f.Select(x =>
+                //    {
+                //        return new KeyValuePair<string, string>(x.Key, x.Value.ToString());
+                //    });
+            }
+            return null;
+        }
         //protected string PageName { 
         //    get 
         //    { 

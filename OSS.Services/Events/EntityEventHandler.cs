@@ -26,7 +26,6 @@ namespace OSS.Services.Events
         /// <returns>A task that represents the asynchronous operation</returns>
         public Task RunAsync<TEvent>(TEvent entity)
         {
-            var total = _service.GetTotal(null);
             var x = entity as EntityUpdatedEvent<OSS.Data.BaseEntity>;
             if (x == null) return Task.CompletedTask;
             if (x.Entity is TestTable) Console.WriteLine(x.Entity.Id);
