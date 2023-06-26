@@ -1,4 +1,7 @@
-﻿using OSS.Data;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using OSS.Data;
+using OSS.Services.Specification;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -56,6 +59,14 @@ namespace OSS.Services
         /// <param name="entities">Entities</param>
         Task DeleteAsync(IEnumerable<TEntity> entities);
 
+        /// <summary>
+        /// get entities
+        /// </summary>
+        /// <param name="where">where as a function of TEntity</param>
+        /// <param name="include">include as a function of TEntity</param>
+        IQueryable<TEntity> GetAll(Func<TEntity, bool> where = null, List<string> include = null);
+
+        IEnumerable<TEntity> FindWithSpecification(ISpecification<TEntity> specification = null);
         #endregion
 
         #region Properties

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OSS.Data;
 using OSS.Services.Events;
+using OSS.Services.Specification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -171,7 +172,25 @@ namespace OSS.Services
             }
         }
 
+        public IQueryable<TEntity> GetAll(Func<TEntity, bool> where = null, List<string> include = null)
+        {
+            var query = Entities.AsNoTracking();
+            if (include != null && include.Count > 0)
+            {
+                foreach (var item in include)
+                {
+                    query = query.Include(item);
+                }
+            }
+            if (where != null) query = query.Where(where).AsQueryable();
 
+            return query;
+        }
+
+        public IEnumerable<TEntity> FindWithSpecification(ISpecification<TEntity> specification = null)
+        {
+            return SpecificationEvaluator<TEntity>.GetQuery(_context.Set<TEntity>().AsQueryable(), specification);
+        }
         #endregion
 
         #region Properties

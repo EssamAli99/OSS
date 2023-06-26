@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OSS.Data.Entities;
 using OSS.Services.Models;
+using OSS.Services.Specification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace OSS.Services.DomainServices
             string orderDir = "asc";
             var currentPage = 1;
             Func<TestTable, bool> where = null;
-            var query = _repository.TableNoTracking;
+            //var query = _repository.TableNoTracking;
             if (param != null && param.Any())
             {
                 if (param != null && param.Any(x => x.Key == "draw"))
@@ -63,10 +64,18 @@ namespace OSS.Services.DomainServices
                 {
                     var aaa = param.FirstOrDefault(x => x.Key == "search[value]").Value;
                     where = x => x.Text1.Contains(aaa) || x.Text2.Contains(aaa);
-                    if (!string.IsNullOrEmpty(aaa)) query = query.Where(where).AsQueryable();
+                    //if (!string.IsNullOrEmpty(aaa)) query = query.Where(where).AsQueryable();
                 }
             }
-
+            
+            /* 
+             this is how to use specification pattern 
+            */
+            
+            //var spec = new TestTableWithDescSpecification("aa");
+            //var query = _repository.FindWithSpecification(spec);
+            
+            var query = _repository.GetAll(where);
             if (!string.IsNullOrEmpty(orderBy))
             {
                 if (orderDir == "asc") query = query.OrderBy(x => x.Text1);
