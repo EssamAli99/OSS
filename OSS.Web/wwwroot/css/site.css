@@ -68,10 +68,5 @@ body {
 }
 
 .active a {
-/*Oraginial setting*/
-    /*color: black !important;*/
-
-/*Added by Fahmy */
-    color: lawngreen;
-    background-color:black;
+    color: black !important;
 }
