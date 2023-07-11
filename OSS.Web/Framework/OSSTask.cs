@@ -174,7 +174,7 @@ namespace OSS.Web.Framework
                     PageUrl = _webHelper.GetThisPageUrl(true),
                     ReferrerUrl = _webHelper.GetUrlReferrer()
                 };
-                _logger.Insert(m);
+                await _logger.Insert(m);
 
                 if (throwException)
                     throw;
