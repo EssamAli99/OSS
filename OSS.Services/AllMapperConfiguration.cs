@@ -20,20 +20,21 @@ namespace OSS.Services
             CreateMap<Language, LanguageModel>();
             CreateMap<QueuedEmail, QueuedEmailModel>();
 
-            //add some generic mapping rules
-            ForAllMaps((mapConfiguration, map) =>
-            {
-                if (typeof(BaseModel).IsAssignableFrom(mapConfiguration.DestinationType))
-                {
-                    map.ForMember(nameof(BaseModel.ModelMode), options => options.Ignore());
-                    map.ForMember(nameof(BaseModel.EncrypedId), options => options.MapFrom(entity => ((BaseEntity)entity).Id.ToString()));
-                }
+            ////moved to startup as part of upgrade automapper
+            ////add some generic mapping rules
+            //ForAllMaps((mapConfiguration, map) =>
+            //{
+            //    if (typeof(BaseModel).IsAssignableFrom(mapConfiguration.DestinationType))
+            //    {
+            //        map.ForMember(nameof(BaseModel.ModelMode), options => options.Ignore());
+            //        map.ForMember(nameof(BaseModel.EncrypedId), options => options.MapFrom(entity => ((BaseEntity)entity).Id.ToString()));
+            //    }
 
-                if (typeof(BaseEntity).IsAssignableFrom(mapConfiguration.DestinationType))
-                {
-                    map.ForMember(nameof(BaseEntity.Id), options => options.MapFrom(entity => int.Parse(((BaseModel)entity).EncrypedId)));
-                }
-            });
+            //    if (typeof(BaseEntity).IsAssignableFrom(mapConfiguration.DestinationType))
+            //    {
+            //        map.ForMember(nameof(BaseEntity.Id), options => options.MapFrom(entity => int.Parse(((BaseModel)entity).EncrypedId)));
+            //    }
+            //});
 
 
         }

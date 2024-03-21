@@ -11,8 +11,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using OSS.Data;
+
 //using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
 using OSS.Services;
+using OSS.Services.Models;
 using System;
 
 namespace OSS.Web
@@ -79,6 +82,19 @@ namespace OSS.Web
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(typeof(AllMapperConfiguration));
+                AutoMapper.Internal.InternalApi.Internal(cfg).ForAllMaps((mapConfiguration, map) =>
+                {
+                    if (typeof(BaseModel).IsAssignableFrom(mapConfiguration.DestinationType))
+                    {
+                        map.ForMember(nameof(BaseModel.ModelMode), options => options.Ignore());
+                        map.ForMember(nameof(BaseModel.EncrypedId), options => options.MapFrom(entity => ((BaseEntity)entity).Id.ToString()));
+                    }
+
+                    if (typeof(BaseEntity).IsAssignableFrom(mapConfiguration.DestinationType))
+                    {
+                        map.ForMember(nameof(BaseEntity.Id), options => options.MapFrom(entity => int.Parse(((BaseModel)entity).EncrypedId)));
+                    }
+                });
             });
 
             //register
