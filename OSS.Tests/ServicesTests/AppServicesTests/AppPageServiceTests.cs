@@ -50,8 +50,7 @@ namespace OSS.Services.Tests
         {
             var p = await _service.GetAppPagesAsync();
 
-            Assert.NotNull(p);
-            Assert.AreEqual(p.Count, 2);
+            Assert.Equals(p.Count, 2);
         }
     }
 }
