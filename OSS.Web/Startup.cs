@@ -11,22 +11,27 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using OSS.Data;
 
 //using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
 using OSS.Services;
 using OSS.Services.Models;
 using System;
+using System.IO;
 
 namespace OSS.Web
 {
     public class Startup
     {
+        private readonly IHostEnvironment _environment;
+
         public IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             Configuration = configuration;
+            _environment = environment;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -69,8 +74,11 @@ namespace OSS.Web
                 options.SlidingExpiration = true;
             });
 
+            var keysFolder = Path.Combine(_environment.ContentRootPath, "ProtectionKeys");
             services.AddDataProtection()
-                .SetDefaultKeyLifetime(TimeSpan.FromDays(14));
+                .SetApplicationName("Oss")
+                .PersistKeysToFileSystem(new DirectoryInfo(keysFolder))
+                .SetDefaultKeyLifetime(TimeSpan.FromDays(30));
 
             services.AddMvc(opt => opt.EnableEndpointRouting = false)
                 .AddRazorRuntimeCompilation()
