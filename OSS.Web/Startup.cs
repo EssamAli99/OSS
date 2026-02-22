@@ -45,7 +45,9 @@ namespace OSS.Web
             //    //options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
 
             //});
-            var scon = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Working\CODE\OSS\OSS.Web\OSS.Web\App_Data\OSS_DB.mdf;Integrated Security=True";
+           
+            // var scon = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Working\CODE\OSS\OSS.Web\OSS.Web\App_Data\OSS_DB.mdf;Integrated Security=True";
+            var scon = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=D:\ESSAM\CODE\OSS\OSS.Web\App_Data\OSS_DB.mdf;Integrated Security=True";
             var constr = Configuration.GetConnectionString("DefaultConnection");
             services.AddControllersWithViews();
             services.AddRazorPages();

@@ -138,7 +138,7 @@ namespace OSS.Services.ExportImport.Help
                     if (!UseDropdownLists)
                         continue;
 
-                    var validator = cell.DataValidation;
+                    var validator = cell.CreateDataValidation();
                     validator.InCellDropdown = true;
 
                     validator.IgnoreBlanks = prop.AllowBlank;
@@ -151,7 +151,7 @@ namespace OSS.Services.ExportImport.Help
                     {
                         var fCell = fWorksheet.Row(fRow++).Cell(prop.PropertyOrderPosition);
 
-                        if (fCell.Value != null && fCell.Value.ToString() == dropDownElement)
+                        if (fCell.Value.ToString() == dropDownElement)
                             break;
 
                         fCell.Value = dropDownElement;
@@ -172,15 +172,15 @@ namespace OSS.Services.ExportImport.Help
                     }
                     else if (value is Guid guidValue)
                     {
-                        cell.SetValue(guidValue);
+                        cell.SetValue(guidValue.ToString());
                     }
                     else if (value is Enum enumValue)
                     {
-                        cell.SetValue(enumValue);
+                        cell.SetValue((XLCellValue)enumValue);
                     }
                     else
                     {
-                        cell.Value = value;
+                        cell.Value = value.ToString();
                     }
                 }
                 cell.Style.Alignment.WrapText = false;
@@ -215,7 +215,7 @@ namespace OSS.Services.ExportImport.Help
             foreach (var caption in _properties.Values)
             {
                 var cell = worksheet.Row(row).Cell(caption.PropertyOrderPosition + cellOffset);
-                cell.Value = caption;
+                cell.Value = caption.ToString();
 
                 SetCaptionStyle(cell);
             }

@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="OSS.Data/OSS.Data.csproj" />
+  <Project Path="OSS.Services/OSS.Services.csproj" />
+  <Project Path="OSS.Tests/OSS.Tests.csproj" />
+  <Project Path="OSS.Web/OSS.Web.csproj" />
+</Solution>

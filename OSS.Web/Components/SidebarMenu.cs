@@ -17,7 +17,8 @@ namespace OSS.Web.Components
             var allowedPages = "";
             if (this.UserClaimsPrincipal != null && this.UserClaimsPrincipal.Claims != null && this.UserClaimsPrincipal.Claims.Count() > 0)
             {
-                allowedPages = this.UserClaimsPrincipal.Claims.Where(c => c.Type == "AllowedPages").FirstOrDefault().Value;
+                var pagesclaim = this.UserClaimsPrincipal.Claims.FirstOrDefault(c => c.Type == "AllowedPages");
+                if (pagesclaim != null) allowedPages = pagesclaim.Value;
             }
 
             var model = await _cModelFactory.PrepareSideMenu(allowedPages);
