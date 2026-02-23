@@ -1,8 +1,9 @@
-﻿namespace OSS.Services.Models
+namespace OSS.Services.Models
 {
-    public class LanguageModel
+    public class LanguageModel : BaseModel
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
+        public string? LanguageCulture { get; set; }
+        public int DisplayOrder { get; set; }
     }
 }

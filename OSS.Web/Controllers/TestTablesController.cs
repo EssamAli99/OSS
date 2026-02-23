@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using OSS.Services;
 using OSS.Services.DomainServices;
 using OSS.Services.ExportImport;
@@ -51,7 +51,7 @@ namespace OSS.Web.Controllers
             return View("Edit", testTable);
         }
 
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int id)
         {
             //if (!AllowedPermissions.Contains(PermissionIds.UPDATE)) return StatusCode(401);
             var testTable = await _service.PrepareMode(id);
@@ -62,9 +62,9 @@ namespace OSS.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, TestTableModel testTable)
+        public async Task<IActionResult> Edit(int id, TestTableModel testTable)
         {
-            if (id != testTable.EncrypedId)
+            if (id != testTable.Id)
             {
                 return NotFound();
             }
@@ -78,7 +78,7 @@ namespace OSS.Web.Controllers
         }
 
         // GET: TestTables/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             var testTable = await _service.PrepareMode(id);
             if (testTable == null) return NotFound();
@@ -88,7 +88,7 @@ namespace OSS.Web.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(string id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
             await _service.Delete(id);
             return RedirectToAction(nameof(Index));

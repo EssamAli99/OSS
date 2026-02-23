@@ -1,4 +1,4 @@
-﻿using OSS.Services.AppServices;
+using OSS.Services.AppServices;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,27 +11,27 @@ namespace OSS.Web.Framework
     /// Represents task manager
     /// </summary>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public partial class TaskManager
+    public class TaskManager
     {
-        #region Fields
+
         private readonly IScheduleTaskService _taskService;
         private readonly List<TaskThread> _taskThreads = new List<TaskThread>();
         private readonly IHttpClientFactory _httpClient;
-        private readonly ILogger _logger;
-        #endregion
+        private readonly ILogService _logger;
 
-        #region Ctor
+
+
 
         /// <returns>A task that represents the asynchronous operation</returns>
-        public TaskManager(IScheduleTaskService scheduleTaskService, IHttpClientFactory client, ILogger logger)
+        public TaskManager(IScheduleTaskService scheduleTaskService, IHttpClientFactory client, ILogService logger)
         {
             _taskService = scheduleTaskService;  //_context.HttpContext.RequestServices.GetService(typeof(IScheduleTaskService)) as IScheduleTaskService; //scheduleTaskService;
             _httpClient = client;
             _logger = logger;
         }
-        #endregion
 
-        #region Methods
+
+
 
         /// <summary>
         /// Initializes the task manager
@@ -97,9 +97,9 @@ namespace OSS.Web.Framework
             }
         }
 
-        #endregion
 
-        #region Properties
+
+
 
         /// <summary>
         /// Gets the task manger instance
@@ -113,6 +113,6 @@ namespace OSS.Web.Framework
         /// <returns>A task that represents the asynchronous operation</returns>
         public IList<TaskThread> TaskThreads => new ReadOnlyCollection<TaskThread>(_taskThreads);
 
-        #endregion
+
     }
 }

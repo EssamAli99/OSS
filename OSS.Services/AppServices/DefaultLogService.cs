@@ -1,18 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+#nullable disable
+using Microsoft.EntityFrameworkCore;
 using OSS.Data.Entities;
 using OSS.Services.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OSS.Services.AppServices
 {
-    public partial class DefaultLogger : ILogger
+    public class DefaultLogService : ILogService
     {
 
         private readonly IRepository<Log> _ctx;
-        public DefaultLogger(IRepository<Log> ctx)
+        public DefaultLogService(IRepository<Log> ctx)
         {
             _ctx = ctx;
         }
@@ -22,7 +19,7 @@ namespace OSS.Services.AppServices
             int Id = 0;
             if (!string.IsNullOrEmpty(encryptedId)) Int32.TryParse(encryptedId, out Id);
             if (Id > 0) return await _ctx.GetByIdAsync(Id);
-            return null;
+            return null!;
         }
         public virtual async Task Delete(string id)
         {
@@ -62,7 +59,7 @@ namespace OSS.Services.AppServices
                 return new LogModel
                 {
                     CreatedOnUtc = log.CreatedOnUtc,
-                    EncrypedId = log.Id.ToString(),
+                    Id = log.Id,
                     FullMessage = log.FullMessage,
                     IpAddress = log.IpAddress,
                     LogLevelId = log.LogLevelId,
@@ -73,7 +70,7 @@ namespace OSS.Services.AppServices
                     UserId = log.UserId
                 };
             }
-            return null;
+            return null!;
 
         }
 
@@ -150,7 +147,7 @@ namespace OSS.Services.AppServices
                 ReferrerUrl = x.ReferrerUrl,
                 ShortMessage = x.ShortMessage,
                 UserId = x.UserId,
-                EncrypedId = x.Id.ToString(),
+                Id = x.Id,
                 CreatedOn = x.CreatedOnUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm"),
                 Email = x.User.Email,
                 ModelMode = ModelActions.List

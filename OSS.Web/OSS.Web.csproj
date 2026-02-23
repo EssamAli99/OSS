@@ -11,7 +11,15 @@
     <TargetFramework>net10.0</TargetFramework>
     <UserSecretsId>aspnet-OSS.Web-B82FDBC3-D70E-45C9-A7F8-44AD553B749C</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Using Include="OSS.Data" />
+    <Using Include="OSS.Data.Events" />
+    <Using Include="OSS.Data.Specification" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Remove="Views\Shared\Components\LanguageSelector\Default.cshtml" />

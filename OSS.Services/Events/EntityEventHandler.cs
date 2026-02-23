@@ -1,4 +1,6 @@
-﻿using OSS.Data.Entities;
+using OSS.Data.Entities;
+using OSS.Data.Events;
+using OSS.Data;
 using OSS.Services.DomainServices;
 using System;
 using System.Threading.Tasks;
@@ -8,15 +10,14 @@ namespace OSS.Services.Events
     /// <summary>
     /// Represents the event publisher implementation
     /// </summary>
-    public partial class EntityEventHandler<T> : IEventHandler<T> where T : EventBase
+    public class EntityEventHandler<T> : IEventHandler<T> where T : EventBase
     {
         private readonly ITestTableService _service;
+
         public EntityEventHandler(ITestTableService service)
         {
             _service = service;
         }
-
-        #region Methods
 
         /// <summary>
         /// Publish event to consumers
@@ -26,7 +27,7 @@ namespace OSS.Services.Events
         /// <returns>A task that represents the asynchronous operation</returns>
         public Task RunAsync<TEvent>(TEvent entity)
         {
-            var x = entity as EntityUpdatedEvent<OSS.Data.BaseEntity>;
+            var x = entity as EntityUpdatedEvent<BaseEntity>;
             if (x == null) return Task.CompletedTask;
             if (x.Entity is TestTable) Console.WriteLine(x.Entity.Id);
             return Task.Run(() =>
@@ -34,9 +35,6 @@ namespace OSS.Services.Events
                 Console.WriteLine($"from entity eventhandler -> eventName is: {nameof(TEvent)}");
                 Console.WriteLine($"from entity eventhandler -> entity is: {nameof(entity)}");
             });
-
         }
-
-        #endregion
     }
 }

@@ -1,17 +1,15 @@
-﻿using OSS.Data.Entities;
+using OSS.Data.Entities;
 using OSS.Services.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace OSS.Services.DomainServices
 {
     public interface ITestTableService
     {
-        Task<TestTableModel> PrepareMode(string encryptedId);
+        Task<TestTableModel?> PrepareMode(int id);
         Task<IPagedList<TestTableModel>> PrepareModePagedList(Dictionary<string, string> param, bool all = false);
-        Task<TestTableModel> Save(TestTableModel model);
-        Task Delete(string encryptedId);
-        Task<int> GetTotal(Func<TestTable, bool>? where);
+        Task<TestTableModel?> Save(TestTableModel model);
+        Task Delete(int id);
+        Task<int> GetTotal(Expression<Func<TestTable, bool>>? where = null);
     }
 }

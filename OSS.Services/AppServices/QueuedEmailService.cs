@@ -1,34 +1,31 @@
-﻿using Microsoft.EntityFrameworkCore;
+#nullable disable
+using Microsoft.EntityFrameworkCore;
 using OSS.Data.Entities;
 using OSS.Services.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OSS.Services.AppServices
 {
     /// <summary>
     /// Queued email service
     /// </summary>
-    public partial class QueuedEmailService : IQueuedEmailService
+    public class QueuedEmailService : IQueuedEmailService
     {
-        #region Fields
+
 
         private readonly IRepository<QueuedEmail> _repository;
 
-        #endregion
 
-        #region Ctor
+
+
 
         public QueuedEmailService(IRepository<QueuedEmail> ctx)
         {
             _repository = ctx;
         }
 
-        #endregion
 
-        #region Methods
+
+
 
         public virtual async Task InsertQueuedEmailAsync(QueuedEmailModel model)
         {
@@ -55,16 +52,9 @@ namespace OSS.Services.AppServices
             });
         }
 
-        private async Task<QueuedEmail> GetEntity(string encryptedId)
-        {
-            //TODO: add data protection encrypt and decrypt
-            int Id = Int32.Parse(encryptedId);
-            return await _repository.GetByIdAsync(Id);
-        }
-
         public virtual async Task UpdateQueuedEmailAsync(QueuedEmailModel model)
         {
-            var entity = await GetEntity(model.EncrypedId);
+            var entity = await _repository.GetByIdAsync(model.Id);
             if (entity == null) throw new NullReferenceException("queued email entity is null");
 
             entity.AttachedDownloadId = model.AttachedDownloadId;
@@ -91,7 +81,7 @@ namespace OSS.Services.AppServices
         }
         public virtual async Task DeleteQueuedEmailAsync(QueuedEmailModel model)
         {
-            var entity = await GetEntity(model.EncrypedId);
+            var entity = await _repository.GetByIdAsync(model.Id);
             if (entity != null)
             {
                 await _repository.DeleteAsync(entity);
@@ -125,7 +115,7 @@ namespace OSS.Services.AppServices
                         Subject = entity.Subject,
                         To = entity.To,
                         ToName = entity.ToName,
-                        EncrypedId = entity.Id.ToString(),
+                        Id = entity.Id,
                         ModelMode = ModelActions.Edit,
                         SentOnUtc = entity.SentOnUtc,
                         SentTries = entity.SentTries
@@ -159,7 +149,7 @@ namespace OSS.Services.AppServices
                     Subject = entity.Subject,
                     To = entity.To,
                     ToName = entity.ToName,
-                    EncrypedId = entity.Id.ToString(),
+                    Id = entity.Id,
                     ModelMode = ModelActions.Edit,
                     SentOnUtc = entity.SentOnUtc,
                     SentTries = entity.SentTries
@@ -219,7 +209,7 @@ namespace OSS.Services.AppServices
                     Subject = entity.Subject,
                     To = entity.To,
                     ToName = entity.ToName,
-                    EncrypedId = entity.Id.ToString(),
+                    Id = entity.Id,
                     ModelMode = ModelActions.Edit,
                     SentOnUtc = entity.SentOnUtc,
                     SentTries = entity.SentTries
@@ -247,6 +237,6 @@ namespace OSS.Services.AppServices
             return emails.Length;
         }
 
-        #endregion
+
     }
 }

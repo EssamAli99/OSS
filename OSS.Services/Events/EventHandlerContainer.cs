@@ -1,62 +1,27 @@
-﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using OSS.Data.Events;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OSS.Services.Events
 {
-    public class EventHandlerContainer
+    public class EventHandlerContainer : IEventPublisher
     {
-        private IServiceProvider _serviceProvider = null;
-        private static Dictionary<string, List<Type>> _mappings = new Dictionary<string, List<Type>>();
+        private readonly IServiceProvider _serviceProvider;
 
         public EventHandlerContainer(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
 
-        public static void Subscribe<T, THandler>()
-         where T : EventBase
-         where THandler : IEventHandler<T>
+        public async Task PublishAsync<T>(T @event) where T : EventBase
         {
-            var name = typeof(T).Name;
-
-            if (!_mappings.ContainsKey(name))
+            // Fix-11: Resolve handlers dynamically via DI instead of static dictionary
+            var handlers = _serviceProvider.GetServices<IEventHandler<T>>();
+            foreach (var handler in handlers)
             {
-                _mappings.Add(name, new List<Type> { });
-            }
-
-            _mappings[name].Add(typeof(THandler));
-        }
-
-        public static void Unsubscribe<T, THandler>()
-         where T : EventBase
-         where THandler : IEventHandler<T>
-        {
-            var name = typeof(T).Name;
-            _mappings[name].Remove(typeof(THandler));
-
-            if (_mappings[name].Count == 0)
-            {
-                _mappings.Remove(name);
-            }
-        }
-
-        public async Task PublishAsync<T>(T o) where T : EventBase
-        {
-            var name = typeof(T).Name;
-
-            if (_mappings.ContainsKey(name))
-            {
-                foreach (var handler in _mappings[name])
-                {
-                    var obj = _serviceProvider.GetService(handler);
-                    if (obj != null)
-                    {
-                        var service = (IEventHandler<T>)obj;
-
-                        await service.RunAsync(o);
-                    }
-                }
+                await handler.RunAsync(@event);
             }
         }
     }

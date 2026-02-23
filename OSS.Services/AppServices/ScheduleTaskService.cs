@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+#nullable disable
+using Microsoft.EntityFrameworkCore;
 using OSS.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,24 +11,24 @@ namespace OSS.Services.AppServices
     /// <summary>
     /// Task service
     /// </summary>
-    public partial class ScheduleTaskService : IScheduleTaskService
+    public class ScheduleTaskService : IScheduleTaskService
     {
-        #region Fields
+
 
         private readonly IRepository<ScheduleTask> _repository;
 
-        #endregion
 
-        #region Ctor
+
+
 
         public ScheduleTaskService(IRepository<ScheduleTask> ctx)
         {
             _repository = ctx;
         }
 
-        #endregion
 
-        #region Methods
+
+
 
         public virtual async Task DeleteAsync(ScheduleTask task)
         {
@@ -41,7 +42,7 @@ namespace OSS.Services.AppServices
 
         public virtual async Task<ScheduleTask> GetByTypeAsync(string type)
         {
-            if (string.IsNullOrWhiteSpace(type)) return null;
+            if (string.IsNullOrWhiteSpace(type)) return null!;
 
             return await _repository.Table.Where(st => st.Type == type)
                 .OrderByDescending(t => t.Id).FirstOrDefaultAsync();
@@ -66,6 +67,6 @@ namespace OSS.Services.AppServices
             await _repository.UpdateAsync(task);
         }
 
-        #endregion
+
     }
 }

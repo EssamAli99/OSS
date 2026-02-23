@@ -1,8 +1,6 @@
-﻿using OSS.Services.ExportImport.Help;
+#nullable disable
+using OSS.Services.ExportImport.Help;
 using OSS.Services.Models;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace OSS.Services.ExportImport
@@ -10,9 +8,9 @@ namespace OSS.Services.ExportImport
     /// <summary>
     /// Export manager
     /// </summary>
-    public partial class ExportManager : IExportManager
+    public class ExportManager : IExportManager
     {
-        #region Methods
+
 
         /// <summary>
         /// Export category list to XML
@@ -47,7 +45,7 @@ namespace OSS.Services.ExportImport
             //property manager 
             var manager = new PropertyManager<TestTableModel>(new[]
             {
-                new PropertyByName<TestTableModel>("Id", p => p.EncrypedId),
+                new PropertyByName<TestTableModel>("Id", p => p.Id),
                 new PropertyByName<TestTableModel>("Text1", p => p.Text1),
                 new PropertyByName<TestTableModel>("Text2", p => p.Text2)
             });
@@ -73,7 +71,7 @@ namespace OSS.Services.ExportImport
             foreach (var entity in lst)
             {
                 await xmlWriter.WriteStartElementAsync("TestTable");
-                await xmlWriter.WriteElementStringAsync("Id", null, entity.EncrypedId);
+                await xmlWriter.WriteElementStringAsync("Id", null, entity.Id.ToString());
                 await xmlWriter.WriteElementStringAsync("Text1", null, entity.Text1);
                 await xmlWriter.WriteElementStringAsync("Text2", null, entity.Text2);
 
@@ -87,6 +85,6 @@ namespace OSS.Services.ExportImport
             return stringWriter.ToString();
         }
 
-        #endregion
+
     }
 }

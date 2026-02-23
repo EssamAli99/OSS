@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace OSS.Web.Framework
                 : webHostEnvironment.WebRootPath;
         }
 
-        #region Utilities
+
 
         private static void DeleteDirectoryRecursive(string path)
         {
@@ -57,9 +57,9 @@ namespace OSS.Web.Framework
             return Uri.TryCreate(path, UriKind.Absolute, out var uri) && uri.IsUnc;
         }
 
-        #endregion
 
-        #region Methods
+
+
 
         /// <summary>
         /// Combines an array of strings into a path
@@ -569,7 +569,7 @@ namespace OSS.Web.Framework
             return base.GetFileInfo(subpath);
         }
 
-        #endregion
+
 
         protected string WebRootPath { get; }
     }

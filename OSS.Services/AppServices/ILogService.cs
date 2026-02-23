@@ -1,4 +1,4 @@
-﻿using OSS.Data.Entities;
+using OSS.Data.Entities;
 using OSS.Services.Models;
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OSS.Services.AppServices
 {
-    public partial interface ILogger
+    public interface ILogService
     {
         Task Delete(string id);
         IPagedList<Log> GetAllLogs(DateTime? fromUtc = null, DateTime? toUtc = null,

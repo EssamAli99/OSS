@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using OSS.Web.Framework;
 using System.Linq;
 using System.Threading.Tasks;

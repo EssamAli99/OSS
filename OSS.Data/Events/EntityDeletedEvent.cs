@@ -1,18 +1,18 @@
-﻿using OSS.Data;
+using OSS.Data;
 
-namespace OSS.Services.Events
+namespace OSS.Data.Events
 {
     /// <summary>
-    /// A container for entities that are updated.
+    /// A container for passing entities that have been deleted. This is not used for entities that are deleted logically via a bit column.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class EntityUpdatedEvent<T> : EventBase where T : BaseEntity
+    public class EntityDeletedEvent<T> : EventBase where T : BaseEntity
     {
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="entity">Entity</param>
-        public EntityUpdatedEvent(T entity)
+        public EntityDeletedEvent(T entity)
         {
             Entity = entity;
         }

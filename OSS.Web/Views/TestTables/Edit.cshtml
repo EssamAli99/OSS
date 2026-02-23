@@ -11,7 +11,7 @@
 <div class="row">
     <div class="col-md-6">
     <form id="frmDetails" name="frmDetails" method="post">
-        <input type="hidden" asp-for="EncrypedId" />
+        <input type="hidden" asp-for="Id" />
         @if (Model.ModelMode == OSS.Services.ModelActions.List || Model.ModelMode == OSS.Services.ModelActions.Delete)
         {
             <div class="form-group">

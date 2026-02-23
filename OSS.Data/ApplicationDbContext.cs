@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using OSS.Data.Entities;
 
-namespace OSS.Services
+namespace OSS.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
@@ -22,21 +22,13 @@ namespace OSS.Services
             : base(options)
         {
         }
-        //protected override void OnModelCreating(ModelBuilder builder)
-        //{
-        //    //// to add mapping
-        //    //builder.ApplyConfiguration(new TestTableMap());
-        //    //builder.ApplyConfiguration(new LanguageMap());
-        //    //builder.ApplyConfiguration(new LocaleStringResourceMap());
-        //    //builder.ApplyConfiguration(new AppPageMap());
-        //    //builder.ApplyConfiguration(new LogMap());
-        //    //builder.ApplyConfiguration(new PersonMap());
-        //    //base.OnModelCreating(builder);
-        //}
 
-        //internal object AsNoTracking()
-        //{
-        //    throw new NotImplementedException();
-        //}
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            // DRY: Automatically apply all IEntityTypeConfiguration<T> mappings from this assembly
+            builder.ApplyConfigurationsFromAssembly(System.Reflection.Assembly.GetExecutingAssembly());
+        }
     }
 }

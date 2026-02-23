@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace OSS.Services.Models
+namespace OSS.Data
 {
     /// <summary>
     /// Paged list

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -18,18 +18,18 @@ namespace OSS.Web.Framework
     /// <summary>
     /// Represents a web helper
     /// </summary>
-    public partial class WebHelper : IWebHelper
+    public class WebHelper : IWebHelper
     {
-        #region Fields 
+
 
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUrlHelperFactory _urlHelperFactory;
 
-        #endregion
 
-        #region Ctor
+
+
 
         public WebHelper(IActionContextAccessor actionContextAccessor,
             IHostApplicationLifetime hostApplicationLifetime,
@@ -42,9 +42,9 @@ namespace OSS.Web.Framework
             _urlHelperFactory = urlHelperFactory;
         }
 
-        #endregion
 
-        #region Utilities
+
+
 
         /// <summary>
         /// Check whether current HTTP request is available
@@ -78,9 +78,9 @@ namespace OSS.Web.Framework
             return address != null && address.ToString() != IPAddress.IPv6Loopback.ToString();
         }
 
-        #endregion
 
-        #region Methods
+
+
 
         /// <summary>
         /// Get URL referrer if exists
@@ -493,6 +493,6 @@ namespace OSS.Web.Framework
             throw new Exception("No constructor was found that had all the dependencies satisfied.", innerException);
         }
 
-        #endregion
+
     }
 }

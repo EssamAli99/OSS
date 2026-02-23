@@ -1,4 +1,5 @@
-﻿using System;
+// Re-enabled nullable for modern C# compliance.
+using System;
 
 namespace OSS.Data.Entities
 {
@@ -6,10 +7,10 @@ namespace OSS.Data.Entities
     {
         public int ActivityLogTypeId { get; set; }
         public int? EntityId { get; set; }
-        public string EntityName { get; set; }
-        public string UserId { get; set; }
-        public string Comment { get; set; }
+        public string? EntityName { get; set; }
+        public string? UserId { get; set; }
+        public string? Comment { get; set; }
         public DateTime CreatedOnUtc { get; set; }
-        public virtual string IpAddress { get; set; }
+        public virtual string? IpAddress { get; set; }
     }
 }

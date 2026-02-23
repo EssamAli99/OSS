@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using OSS.Services;
 using OSS.Services.AppServices;
 using OSS.Services.Models;
@@ -10,8 +10,8 @@ namespace OSS.Web.Areas.Admin.Controllers
 {
     public class LogsController : AdminBaseController
     {
-        private readonly ILogger _Logger;
-        public LogsController(ILogger logService)
+        private readonly ILogService _Logger;
+        public LogsController(ILogService logService)
         {
             _Logger = logService;
         }

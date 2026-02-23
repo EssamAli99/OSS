@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace OSS.Services.AppServices
 {
-    public partial interface ILocalizationService
+    public interface ILocalizationService
     {
-        public int WorkingLanguageId { get; set; }
+
         Task DeleteLocaleStringResource(LocaleStringResource localeStringResource);
         Task<LocaleStringResource> GetLocaleStringResourceById(int localeStringResourceId);
         Task<LocaleStringResource> GetLocaleStringResourceByName(string resourceName);

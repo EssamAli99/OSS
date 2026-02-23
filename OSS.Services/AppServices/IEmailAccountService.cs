@@ -1,10 +1,8 @@
-﻿using OSS.Services.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using OSS.Services.Models;
 
 namespace OSS.Services.AppServices
 {
-    public partial interface IEmailAccountService
+    public interface IEmailAccountService
     {
         /// <summary>
         /// Inserts an email account
@@ -35,7 +33,7 @@ namespace OSS.Services.AppServices
         /// A task that represents the asynchronous operation
         /// The task result contains the email account
         /// </returns>
-        Task<EmailAccountModel> GetByIdAsync(string encryptedId);
+        Task<EmailAccountModel> GetByIdAsync(int id);
         Task<EmailAccountModel> GetDefaultEmailAsync();
 
         /// <summary>

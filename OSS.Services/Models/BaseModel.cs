@@ -1,8 +1,8 @@
-﻿namespace OSS.Services.Models
+namespace OSS.Services.Models
 {
     public abstract class BaseModel
     {
-        public string EncrypedId { get; set; }
+        public int Id { get; set; }
         public ModelActions ModelMode { get; set; }
     }
 }

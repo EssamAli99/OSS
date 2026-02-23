@@ -1,40 +1,36 @@
-﻿using OSS.Services.AppServices;
+#nullable disable
+using OSS.Services.AppServices;
 using OSS.Services.DomainServices;
 using OSS.Services.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OSS.Services.ExportImport
 {
     /// <summary>
     /// Import manager
     /// </summary>
-    public partial class ImportManager : IImportManager
+    public class ImportManager : IImportManager
     {
-        #region Fields
+
 
         private readonly ILocalizationService _localizationService;
-        private readonly ILogger _logger;
+        private readonly ILogService _logger;
         private readonly ITestTableService _service;
 
-        #endregion
 
-        #region Ctor
+
+
 
         public ImportManager(ILocalizationService localizationService,
-            ILogger logger, ITestTableService service)
+            ILogService logger, ITestTableService service)
         {
             _localizationService = localizationService;
             _logger = logger;
             _service = service;
         }
 
-        #endregion
 
-        #region Methods
+
+
 
 
         /// <summary>
@@ -66,14 +62,14 @@ namespace OSS.Services.ExportImport
                         isActive = bool.Parse(tmp[1].Trim());
 
                     //"storeId" field specified
-                    var Id = "0";
+                    int id = 0;
                     if (tmp.Length == 3)
                     {
-                        if (int.TryParse(tmp[0], out int id)) throw new Exception("Wrong format");
+                        if (int.TryParse(tmp[0], out id)) throw new Exception("Wrong format");
                     }
 
                     //import
-                    var entity = await _service.PrepareMode(Id);
+                    var entity = await _service.PrepareMode(id);
                     if (entity != null)
                     {
                         entity.Text1 = tmp[1].Trim();
@@ -83,7 +79,7 @@ namespace OSS.Services.ExportImport
                     {
                         entity = new TestTableModel
                         {
-                            EncrypedId = tmp[0].Trim(),
+                            Id = int.Parse(tmp[0].Trim()),
                             Text1 = tmp[1].Trim(),
                             Text2 = tmp[2].Trim(),
                         };
@@ -96,9 +92,9 @@ namespace OSS.Services.ExportImport
             return count;
         }
 
-        #endregion
 
-        #region Nested classes
+
+
 
         public class CategoryKey
         {
@@ -142,6 +138,6 @@ namespace OSS.Services.ExportImport
             }
         }
 
-        #endregion
+
     }
 }

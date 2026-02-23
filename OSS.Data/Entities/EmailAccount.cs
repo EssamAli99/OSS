@@ -1,21 +1,21 @@
-﻿namespace OSS.Data.Entities
+namespace OSS.Data.Entities
 {
-    public partial class EmailAccount : BaseEntity
+    public class EmailAccount : BaseEntity
     {
         /// <summary>
         /// Gets or sets an email address
         /// </summary>
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets an email display name
         /// </summary>
-        public string DisplayName { get; set; }
+        public string DisplayName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets an email host
         /// </summary>
-        public string Host { get; set; }
+        public string Host { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets an email port
@@ -25,12 +25,12 @@
         /// <summary>
         /// Gets or sets an email user name
         /// </summary>
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets an email password
         /// </summary>
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets a value that controls whether the SmtpClient uses Secure Sockets Layer (SSL) to encrypt the connection

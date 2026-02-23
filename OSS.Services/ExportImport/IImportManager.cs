@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace OSS.Services.ExportImport
@@ -6,7 +6,7 @@ namespace OSS.Services.ExportImport
     /// <summary>
     /// Import manager interface
     /// </summary>
-    public partial interface IImportManager
+    public interface IImportManager
     {
         /// <summary>
         /// Import newsletter subscribers from TXT file

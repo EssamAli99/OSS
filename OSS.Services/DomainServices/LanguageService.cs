@@ -1,10 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using OSS.Data.Entities;
 using OSS.Services.AppServices;
 using OSS.Services.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OSS.Services.DomainServices
 {
@@ -26,7 +23,9 @@ namespace OSS.Services.DomainServices
                     .Select(a => new LanguageModel
                     {
                         Id = a.Id,
-                        Name = a.Name
+                        Name = a.Name,
+                        LanguageCulture = a.LanguageCulture,
+                        DisplayOrder = a.DisplayOrder
                     })
                     .ToListAsync();
             });

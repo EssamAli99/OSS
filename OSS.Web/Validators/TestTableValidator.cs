@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using OSS.Services.AppServices;
 using OSS.Services.Models;
 using OSS.Web.Framework;

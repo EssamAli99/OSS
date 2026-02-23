@@ -1,4 +1,4 @@
-﻿using OSS.Services.DomainServices;
+using OSS.Services.DomainServices;
 using OSS.Services.Models;
 using OSS.Web.Models;
 using System.Collections.Generic;
@@ -43,7 +43,7 @@ namespace OSS.Web.Framework
             return result;
         }
 
-        #region Utilities
+
 
         private void PopulateTree(ref SiteMapNode result, ref List<AppPageModel> allPages, int PId)
         {
@@ -75,6 +75,6 @@ namespace OSS.Web.Framework
             };
             return node;
         }
-        #endregion
+
     }
 }

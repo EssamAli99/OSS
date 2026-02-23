@@ -1,14 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using OSS.Data;
 using System.Linq;
 
-namespace OSS.Services.Specification
+namespace OSS.Data.Specification
 {
     public class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
     {
-        public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> specification)
+        public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity>? specification)
         {
             var query = inputQuery;
+
+            if (specification == null) return query;
 
             // modify the IQueryable using the specification's criteria expression
             if (specification.Criteria != null)

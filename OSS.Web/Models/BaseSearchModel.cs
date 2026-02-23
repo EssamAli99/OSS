@@ -1,8 +1,8 @@
-﻿namespace OSS.Web.Models
+namespace OSS.Web.Models
 {
     public class BaseSearchModel
     {
-        #region Ctor
+
 
         public BaseSearchModel()
         {
@@ -10,9 +10,9 @@
             Length = 10;
         }
 
-        #endregion
 
-        #region Properties
+
+
 
         /// <summary>
         /// Gets a page number
@@ -27,12 +27,12 @@
         /// <summary>
         /// Gets or sets a comma-separated list of available page sizes
         /// </summary>
-        public string AvailablePageSizes { get; set; }
+        public string AvailablePageSizes { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets draw. Draw counter. This is used by DataTables to ensure that the Ajax returns from server-side processing requests are drawn in sequence by DataTables (Ajax requests are asynchronous and thus can return out of sequence).
         /// </summary>
-        public string Draw { get; set; }
+        public string Draw { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets skiping number of rows count. Paging first record indicator.
@@ -44,9 +44,9 @@
         /// </summary>
         public int Length { get; set; }
 
-        #endregion
 
-        #region Methods
+
+
 
         /// <summary>
         /// Set grid page parameters
@@ -76,6 +76,6 @@
             AvailablePageSizes = availablePageSizes;
         }
 
-        #endregion
+
     }
 }

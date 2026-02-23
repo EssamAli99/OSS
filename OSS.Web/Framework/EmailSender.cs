@@ -1,4 +1,4 @@
-﻿using MimeKit;
+using MimeKit;
 using MimeKit.Text;
 using OSS.Services.AppServices;
 using OSS.Services.Models;
@@ -10,17 +10,17 @@ using System.Threading.Tasks;
 
 namespace OSS.Web.Framework
 {
-    public partial class EmailSender : IEmailSender
+    public class EmailSender : IEmailSender
     {
-        #region Fields
+
 
         private readonly IOSSFileProvider _FileProvider;
         private readonly IEmailAccountService _EmailAccountService;
         private readonly ISmtpBuilder _SmtpBuilder;
 
-        #endregion
 
-        #region Ctor
+
+
 
         public EmailSender(IOSSFileProvider fileProvider, IEmailAccountService emailService, ISmtpBuilder smtpBuilder)
         {
@@ -29,9 +29,9 @@ namespace OSS.Web.Framework
             _SmtpBuilder = smtpBuilder;
         }
 
-        #endregion
 
-        #region Utilities
+
+
 
         ///// <summary>
         ///// Create an file attachment for the specific download object from DB
@@ -84,7 +84,7 @@ namespace OSS.Web.Framework
         /// <returns>A leaf-node MIME part that contains an attachment.</returns>
         protected MimePart CreateMimeAttachment(string attachmentFileName, byte[] binaryContent, DateTime cDate, DateTime mDate, DateTime rDate)
         {
-            if (!ContentType.TryParse(MimeTypes.GetMimeType(attachmentFileName), out var mimeContentType))
+            if (!ContentType.TryParse(MimeKit.MimeTypes.GetMimeType(attachmentFileName), out var mimeContentType))
                 mimeContentType = new ContentType("application", "octet-stream");
 
             return new MimePart(mimeContentType)
@@ -100,9 +100,9 @@ namespace OSS.Web.Framework
             };
         }
 
-        #endregion
 
-        #region Methods
+
+
         public virtual async Task SendEmailAsync(string toAddress, string subject, string body)
         {
             var emailAccount = await _EmailAccountService.GetDefaultEmailAsync();
@@ -171,6 +171,6 @@ namespace OSS.Web.Framework
             await smtpClient.SendAsync(message);
             await smtpClient.DisconnectAsync(true);
         }
-        #endregion
+
     }
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+#nullable disable
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace OSS.Services.ExportImport.Help
 {
+    public class ExportItem
+    {
+        public string Text { get; set; } = string.Empty;
+        public string Value { get; set; } = string.Empty;
+    }
+
     /// <summary>
     /// A helper class to access the property by name
     /// </summary>
@@ -38,8 +44,8 @@ namespace OSS.Services.ExportImport.Help
         public PropertyByName(string propertyName, Func<T, object> func = null, bool ignore = false)
         {
             PropertyName = propertyName;
-            
-            if(func != null)
+
+            if (func != null)
                 GetProperty = obj => Task.FromResult(func(obj));
 
             PropertyOrderPosition = 1;
@@ -208,16 +214,16 @@ namespace OSS.Services.ExportImport.Help
             if (string.IsNullOrEmpty(name?.ToString()))
                 return 0;
 
-            if (!int.TryParse(name.ToString(), out var id)) 
+            if (!int.TryParse(name.ToString(), out var id))
                 id = 0;
 
             return Convert.ToInt32(DropDownElements.FirstOrDefault(ev => ev.Text.Trim() == name.ToString().Trim())?.Value ?? id.ToString());
         }
-        
+
         /// <summary>
         /// Elements for a drop-down cell
         /// </summary>
-        public SelectList DropDownElements { get; set; }
+        public System.Collections.Generic.List<ExportItem> DropDownElements { get; set; }
 
         /// <summary>
         /// Indicates whether the cell can contain an empty value. Makes sense only for a drop-down cells

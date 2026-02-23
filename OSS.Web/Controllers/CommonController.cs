@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using OSS.Web.Framework;
 
 namespace OSS.Web.Controllers

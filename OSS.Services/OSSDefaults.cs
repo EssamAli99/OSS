@@ -1,4 +1,4 @@
-﻿namespace OSS.Services
+namespace OSS.Services
 {
     public enum ModelActions
     {
@@ -27,9 +27,9 @@
     /// <summary>
     /// Represents default values related to localization services
     /// </summary>
-    public static partial class OSSDefaults
+    public static class OSSDefaults
     {
-        #region Languages
+
 
         /// <summary>
         /// Gets a key for caching
@@ -46,9 +46,9 @@
 
         public static int CacheTime => 60;
 
-        #endregion
 
-        #region Locales
+
+
 
         /// <summary>
         /// Gets a key for caching
@@ -107,9 +107,9 @@
         /// </summary>
         public static string PermissionLocaleStringResourcesPrefix => "OSS.Permission.";
 
-        #endregion
 
-        #region Localized properties
+
+
 
         /// <summary>
         /// Gets a key for caching
@@ -132,9 +132,9 @@
         /// </summary>
         public static string LocalizedPropertyPatternCacheKey => "OSS.localizedproperty.";
 
-        #endregion
 
-        #region Http Defaults
+
+
         /// <summary>
         /// Gets the name of the default HTTP client
         /// </summary>
@@ -150,6 +150,6 @@
         /// </summary>
         public static string HttpXForwardedProtoHeader => "X-Forwarded-Proto";
 
-        #endregion
+
     }
 }

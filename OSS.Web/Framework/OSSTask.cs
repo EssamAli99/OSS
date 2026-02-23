@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using OSS.Data.Entities;
 using OSS.Services.AppServices;
 using OSS.Services.Models;
@@ -12,33 +12,33 @@ namespace OSS.Web.Framework
     /// Task
     /// </summary>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public partial class OSSTask
+    public class OSSTask
     {
-        #region Fields
+
 
         private int langId = 1;
         private bool? _enabled;
         private readonly HttpContext _context;
         private readonly IScheduleTaskService _scheduleTaskService;
-        private readonly ILogger _logger;
+        private readonly ILogService _logger;
         private readonly ILocalizationService _localizationService;
         private readonly ILocker _locker;
         private readonly IWebHelper _webHelper;
-        #endregion
 
-        #region Ctor
+
+
 
         /// <summary>
         /// Ctor for Task
         /// </summary>
         /// <param name="task">Task </param>
         /// <returns>A task that represents the asynchronous operation</returns>
-        public OSSTask(ScheduleTask task, HttpContext context)//, IScheduleTaskService scheduleTaskService, ILogger logger, ILocalizationService localization, ILocker locker, IWebHelper webHelper)
+        public OSSTask(ScheduleTask task, HttpContext context)//, IScheduleTaskService scheduleTaskService, ILogService logger, ILocalizationService localization, ILocker locker, IWebHelper webHelper)
         {
             ScheduleTask = task;
             _context = context;
             _scheduleTaskService = _context.RequestServices.GetService(typeof(IScheduleTaskService)) as IScheduleTaskService; //scheduleTaskService;
-            _logger = _context.RequestServices.GetService(typeof(ILogger)) as ILogger; //logger;
+            _logger = _context.RequestServices.GetService(typeof(ILogService)) as ILogService; //logger;
             _localizationService = _context.RequestServices.GetService(typeof(ILocalizationService)) as ILocalizationService; //localization;
             _locker = _context.RequestServices.GetService(typeof(ILocker)) as ILocker; //locker;
             _webHelper = _context.RequestServices.GetService(typeof(IWebHelper)) as IWebHelper; //webHelper;
@@ -46,9 +46,9 @@ namespace OSS.Web.Framework
             if (workContext != null) langId = workContext.WorkingLanguageId;
         }
 
-        #endregion
 
-        #region Utilities
+
+
 
         /// <summary>
         /// Initialize and execute task
@@ -117,9 +117,9 @@ namespace OSS.Web.Framework
             return true;
         }
 
-        #endregion
 
-        #region Methods
+
+
 
         /// <summary>
         /// Executes the task
@@ -181,9 +181,9 @@ namespace OSS.Web.Framework
             }
         }
 
-        #endregion
 
-        #region Properties
+
+
 
         /// <summary>
         /// Schedule task
@@ -206,6 +206,6 @@ namespace OSS.Web.Framework
             set => _enabled = value;
         }
 
-        #endregion
+
     }
 }

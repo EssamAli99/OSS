@@ -1,4 +1,4 @@
-﻿using MailKit.Net.Smtp;
+using MailKit.Net.Smtp;
 using OSS.Services.Models;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;

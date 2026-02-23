@@ -1,9 +1,9 @@
-﻿using OSS.Services.Models;
+using OSS.Services.Models;
 using System.Collections.Generic;
 
 namespace OSS.Web.Models
 {
-    public partial class LanguageSelectorModel
+    public class LanguageSelectorModel
     {
         public LanguageSelectorModel()
         {

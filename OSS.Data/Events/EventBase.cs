@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace OSS.Services.Events
+namespace OSS.Data.Events
 {
     public class EventBase
     {
@@ -8,7 +8,7 @@ namespace OSS.Services.Events
         {
             OccuredOn = DateTime.Now;
         }
-        public string Message { get; set; }
+        public string Message { get; set; } = string.Empty;
         protected DateTime OccuredOn { get; set; }
     }
 }

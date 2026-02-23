@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OSS.Services;
@@ -43,7 +43,6 @@ namespace OSS.Web.Areas.Admin.Controllers
                 recordsTotal = lst.Count,
                 data = lst.Select(x => new RoleModel
                 {
-                    EncrypedId = x.Id,
                     Id = x.Id,
                     ModelMode = ModelActions.List,
                     Name = x.Name
@@ -110,7 +109,6 @@ namespace OSS.Web.Areas.Admin.Controllers
             pages = pages.Where(x => !string.IsNullOrEmpty(x.ControllerName)).ToList();
             var model = new RoleModel
             {
-                EncrypedId = role.Id,
                 Id = role.Id,
                 ModelMode = m,
                 Name = role.Name,
@@ -138,7 +136,7 @@ namespace OSS.Web.Areas.Admin.Controllers
         public async Task<ActionResult> Edit(RoleModel model)
         {
             //if (!AllowedPermissions.Contains(Permissions.UPDATE)) return StatusCode(403);
-            var role = _roleManager.Roles.FirstOrDefault(x => x.Id == model.EncrypedId);
+            var role = _roleManager.Roles.FirstOrDefault(x => x.Id == model.Id);
             if (role != null)
             {
                 if (role.Name != model.Name)

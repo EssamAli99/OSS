@@ -1,37 +1,32 @@
-﻿using Microsoft.EntityFrameworkCore;
+#nullable disable
+using Microsoft.EntityFrameworkCore;
 using OSS.Data.Entities;
 using OSS.Services.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OSS.Services.AppServices
 {
-    public partial class EmailAccountService : IEmailAccountService
+    public class EmailAccountService : IEmailAccountService
     {
-        #region Fields
+
 
         private readonly IRepository<EmailAccount> _repository;
 
-        #endregion
 
-        #region Ctor
+
+
 
         public EmailAccountService(IRepository<EmailAccount> ctx)
         {
             _repository = ctx;
         }
 
-        #endregion
 
-        #region Methods
 
-        private async Task<EmailAccount> GetEntity(string encryptedId)
+
+
+        private async Task<EmailAccount> GetEntity(int id)
         {
-            //TODO: add data protection encrypt and decrypt
-            int Id = Int32.Parse(encryptedId);
-            return await _repository.GetByIdAsync(Id);
+            return await _repository.GetByIdAsync(id);
         }
 
         public virtual async Task InsertAsync(EmailAccountModel model)
@@ -51,7 +46,7 @@ namespace OSS.Services.AppServices
         public virtual async Task UpdateAsync(EmailAccountModel model)
         {
             if (model == null) throw new ArgumentNullException(nameof(model));
-            var entity = await GetEntity(model.EncrypedId);
+            var entity = await GetEntity(model.Id);
             if (entity != null)
             {
                 entity.Email = model.Email.Trim();
@@ -71,16 +66,16 @@ namespace OSS.Services.AppServices
             if ((await GetAllAsync()).Count == 1)
                 throw new Exception("You cannot delete this email account. At least one account is required.");
 
-            var entity = await GetEntity(model.EncrypedId);
+            var entity = await GetEntity(model.Id);
             if (entity != null)
             {
                 await _repository.DeleteAsync(entity);
             }
         }
 
-        public virtual async Task<EmailAccountModel> GetByIdAsync(string encryptedId)
+        public virtual async Task<EmailAccountModel> GetByIdAsync(int id)
         {
-            var entity = await GetEntity(encryptedId);
+            var entity = await GetEntity(id);
             if (entity != null)
             {
                 return new EmailAccountModel
@@ -88,7 +83,7 @@ namespace OSS.Services.AppServices
                     DisplayName = entity.DisplayName,
                     Email = entity.Email,
                     EnableSsl = entity.EnableSsl,
-                    EncrypedId = entity.Id.ToString(),
+                    Id = entity.Id,
                     Host = entity.Host,
                     ModelMode = ModelActions.List,
                     Password = entity.Password,
@@ -108,7 +103,7 @@ namespace OSS.Services.AppServices
                     DisplayName = x.DisplayName,
                     Email = x.Email,
                     EnableSsl = x.EnableSsl,
-                    EncrypedId = x.Id.ToString(),
+                    Id = x.Id,
                     Host = x.Host,
                     ModelMode = ModelActions.List,
                     Password = x.Password,
@@ -126,7 +121,7 @@ namespace OSS.Services.AppServices
                     DisplayName = x.DisplayName,
                     Email = x.Email,
                     EnableSsl = x.EnableSsl,
-                    EncrypedId = x.Id.ToString(),
+                    Id = x.Id,
                     Host = x.Host,
                     ModelMode = ModelActions.List,
                     Password = x.Password,
@@ -136,6 +131,6 @@ namespace OSS.Services.AppServices
                 }).FirstOrDefaultAsync();
         }
 
-        #endregion
+
     }
 }

@@ -1,5 +1,7 @@
-using Moq;
-using NUnit.Framework;
+using NSubstitute;
+using Xunit;
+using FluentAssertions;
+using OSS.Data;
 using OSS.Data.Entities;
 using OSS.Services.AppServices;
 using OSS.Services.DomainServices;
@@ -9,20 +11,22 @@ using System.Threading.Tasks;
 
 namespace OSS.Services.Tests
 {
-    [TestFixture]
     public class AppPageServiceTests
     {
         private IAppPageService _service;
-        //private IRepository<AppPage> _repository;
-        //private AppPage page1;
-        [SetUp]
-        public void Setup()
+
+        public AppPageServiceTests()
         {
             var page1 = new AppPage
             {
                 ActionName = "actionname",
                 Id = 1,
-                Title = "title"
+                Title = "title",
+                SystemName = "s",
+                ControllerName = "c",
+                AreaName = "a",
+                IconClass = "i",
+                PermissionNames = "p"
             };
             var pages = new List<AppPage>
             {
@@ -30,27 +34,36 @@ namespace OSS.Services.Tests
                 {
                     ActionName = "action2",
                     Id =2,
-                    Title = "title2"
+                    Title = "title2",
+                    SystemName = "s2",
+                    ControllerName = "c2",
+                    AreaName = "a2",
+                    IconClass = "i2",
+                    PermissionNames = "p2"
                 }
             };
             pages.Add(page1);
 
-            var repositoryMock = new Mock<IRepository<AppPage>>();
-            repositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<int>()).Result).Returns(page1);
-            repositoryMock.Setup(r => r.Table).Returns(pages.AsQueryable);
-            repositoryMock.Setup(r => r.TableNoTracking).Returns(pages.AsQueryable);
+            var repositorySub = Substitute.For<IRepository<AppPage>>();
+            repositorySub.GetByIdAsync(Arg.Any<int>()).Returns(Task.FromResult(page1));
 
-            var cachemanger = new Mock<ICacheManager>();
-            cachemanger.Setup(c => c.Get(It.IsAny<string>(), It.IsAny<System.Func<List<AppPage>>>(), It.IsAny<int>())).Returns(pages);
-            _service = new AppPageService(repositoryMock.Object, cachemanger.Object);
+            // AsQueryable returns IQueryable
+            var queryablePages = pages.AsQueryable();
+            repositorySub.Table.Returns(queryablePages);
+            repositorySub.TableNoTracking.Returns(queryablePages);
+
+            var cachemanger = Substitute.For<ICacheManager>();
+            cachemanger.Get(Arg.Any<string>(), Arg.Any<System.Func<Task<List<AppPage>>>>(), Arg.Any<int?>()).Returns(Task.FromResult(pages));
+
+            _service = new AppPageService(repositorySub, cachemanger);
         }
 
-        [Test]
+        [Fact]
         public async Task Service_GetById_Return_Object()
         {
             var p = await _service.GetAppPagesAsync();
 
-            Assert.Equals(p.Count, 2);
+            p.Count.Should().Be(2);
         }
     }
 }

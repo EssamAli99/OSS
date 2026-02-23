@@ -1,3 +1,4 @@
+#nullable disable
 using Microsoft.EntityFrameworkCore;
 using OSS.Data.Entities;
 using System;
@@ -10,26 +11,27 @@ namespace OSS.Services.AppServices
     /// <summary>
     /// Provides information about localization
     /// </summary>
-    public partial class LocalizationService : ILocalizationService
+    public class LocalizationService : ILocalizationService
     {
-        #region Fields
+
 
         private readonly IRepository<LocaleStringResource> _repository;
         private readonly ICacheManager _cacheManager;
-        public int WorkingLanguageId { get; set; }
-        #endregion
+        private readonly IWorkContext _workContext;
 
-        #region Ctor
 
-        public LocalizationService(IRepository<LocaleStringResource> ctx, ICacheManager cacheManager)
+
+
+        public LocalizationService(IRepository<LocaleStringResource> ctx, ICacheManager cacheManager, IWorkContext workContext)
         {
             this._repository = ctx;
             this._cacheManager = cacheManager;
+            this._workContext = workContext;
         }
 
-        #endregion
 
-        #region Utilities
+
+
 
         /// <summary>
         /// Insert resources
@@ -77,9 +79,9 @@ namespace OSS.Services.AppServices
             return dictionary;
         }
 
-        #endregion
 
-        #region Methods
+
+
 
         /// <summary>
         /// Deletes a locale string resource
@@ -116,7 +118,7 @@ namespace OSS.Services.AppServices
         /// <returns>Locale string resource</returns>
         public virtual async Task<LocaleStringResource> GetLocaleStringResourceByName(string resourceName)
         {
-            return await GetLocaleStringResourceByName(resourceName, WorkingLanguageId);
+            return await GetLocaleStringResourceByName(resourceName, _workContext.WorkingLanguageId);
         }
 
         /// <summary>
@@ -296,6 +298,6 @@ namespace OSS.Services.AppServices
             return result;
         }
 
-        #endregion
+
     }
 }

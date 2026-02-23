@@ -1,9 +1,9 @@
-﻿namespace OSS.Services.ExportImport
+namespace OSS.Services.ExportImport
 {
     /// <summary>
     /// Represents default values related to Export/Import features
     /// </summary>
-    public static partial class ExportImportDefaults
+    public static class ExportImportDefaults
     {
         /// <summary>
         /// Gets the name of the default hash algorithm

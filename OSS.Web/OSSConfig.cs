@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace OSS.Web
 {
@@ -27,11 +27,13 @@ namespace OSS.Web
     }
     public struct Permission
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string ActionName { get; set; }
-        public string HtmlElementId { get; set; }
-    };
+        public Permission() { }
+
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string ActionName { get; set; } = string.Empty;
+        public string HtmlElementId { get; set; } = string.Empty;
+    }
 
     public class OSSConfig
     {
@@ -54,8 +56,9 @@ namespace OSS.Web
         public static int ScheduleTaskRunTimeout => 30 * 60;
         public struct NotifyData
         {
+            public NotifyData() { }
             public NotifyType Type { get; set; }
-            public string Message { get; set; }
+            public string Message { get; set; } = string.Empty;
             public bool Encode { get; set; }
         }
 
@@ -69,58 +72,7 @@ namespace OSS.Web
             { "6", "REJECT" },
         };
 
-        public static List<Permission> Permissions => new()
-        {
-            new Permission
-            {
-                Id = PermissionIds.READ,
-                Name = "READ",
-                ActionName = "Index",
-                HtmlElementId = "btnShow"
-            },
-            new Permission
-            {
-                Id = PermissionIds.READ,
-                Name = "READ",
-                ActionName = "GetList",
-                HtmlElementId = "btnShow"
-            },
-            new Permission
-            {
-                Id = PermissionIds.INSERT,
-                Name = "INSERT",
-                ActionName = "Create",
-                HtmlElementId = "btnAdd"
-            },
-            new Permission
-            {
-                Id = PermissionIds.UPDATE,
-                Name = "UPDATE",
-                ActionName = "Edit",
-                HtmlElementId = "btnEdit"
-            },
-            new Permission
-            {
-                Id = PermissionIds.DELET,
-                Name = "DELETE",
-                ActionName = "Delete",
-                HtmlElementId = "btnDelete"
-            },
-            new Permission
-            {
-                Id = PermissionIds.EXPORT,
-                Name = "EXPORT",
-                ActionName = "Export",
-                HtmlElementId = "btnExport"
-            },
-            new Permission
-            {
-                Id = PermissionIds.REJECT,
-                Name = "REJECT",
-                ActionName = "Reject",
-                HtmlElementId = "btnReject"
-            },
-        };
+
     }
 
 }

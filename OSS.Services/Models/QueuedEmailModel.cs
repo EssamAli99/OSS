@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace OSS.Services.Models
 {
@@ -15,62 +15,62 @@ namespace OSS.Services.Models
         /// <summary>
         /// Gets or sets the From property (email address)
         /// </summary>
-        public string From { get; set; }
+        public string From { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the FromName property
         /// </summary>
-        public string FromName { get; set; }
+        public string FromName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the To property (email address)
         /// </summary>
-        public string To { get; set; }
+        public string To { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the ToName property
         /// </summary>
-        public string ToName { get; set; }
+        public string ToName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the ReplyTo property (email address)
         /// </summary>
-        public string ReplyTo { get; set; }
+        public string ReplyTo { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the ReplyToName property
         /// </summary>
-        public string ReplyToName { get; set; }
+        public string ReplyToName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the CC
         /// </summary>
-        public string CC { get; set; }
+        public string CC { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the BCC
         /// </summary>
-        public string Bcc { get; set; }
+        public string Bcc { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the subject
         /// </summary>
-        public string Subject { get; set; }
+        public string Subject { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the body
         /// </summary>
-        public string Body { get; set; }
+        public string Body { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the attachment file path (full file path)
         /// </summary>
-        public string AttachmentFilePath { get; set; }
+        public string AttachmentFilePath { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the attachment file name. If specified, then this file name will be sent to a recipient. Otherwise, "AttachmentFilePath" name will be used.
         /// </summary>
-        public string AttachmentFileName { get; set; }
+        public string AttachmentFileName { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the download identifier of attached file

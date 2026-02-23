@@ -60,7 +60,7 @@
 					  "title": "Edit",
                       "width": 40,
                         "render": function (data, type, row, meta) {
-                            return '<a title="Edit" class="btn btn-outline-info" href="Roles/Edit?m=' + '@OSS.Services.ModelActions.Edit' + '&id=' + row.EncrypedId + '"><i class="fa fad fa-edit"></i></a>';
+                            return '<a title="Edit" class="btn btn-outline-info" href="Roles/Edit?m=' + '@OSS.Services.ModelActions.Edit' + '&id=' + row.Id + '"><i class="fa fad fa-edit"></i></a>';
                         }
                     },
                     { "data": "Name", "name": "Name", "title": "@T("Name")"  },
@@ -68,7 +68,7 @@
 					  "title": "Delete",
                       "width": 40,
                         "render": function (data, type, row, meta) {
-                            return '<a title="Delete" class="btn btn-outline-danger" href="Roles/Edit?m=' +  '@OSS.Services.ModelActions.Delete' + '&id=' + row.EncrypedId + '"><i class="fa fa-trash"></i></a>';
+                            return '<a title="Delete" class="btn btn-outline-danger" href="Roles/Edit?m=' +  '@OSS.Services.ModelActions.Delete' + '&id=' + row.Id + '"><i class="fa fa-trash"></i></a>';
                         }
                     }
                 ]

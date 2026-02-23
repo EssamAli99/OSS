@@ -1,4 +1,4 @@
-﻿using OSS.Web.Models;
+using OSS.Web.Models;
 using System.Threading.Tasks;
 
 namespace OSS.Web.Framework

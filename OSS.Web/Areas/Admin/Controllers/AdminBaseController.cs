@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using OSS.Web.Controllers;
 
 namespace OSS.Web.Areas.Admin.Controllers

@@ -1,4 +1,4 @@
-﻿using OSS.Services.Models;
+using OSS.Services.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,7 +7,7 @@ namespace OSS.Services.ExportImport
     /// <summary>
     /// Export manager interface
     /// </summary>
-    public partial interface IExportManager
+    public interface IExportManager
     {
         /// <summary>
         /// Export TestTables list to XLSX

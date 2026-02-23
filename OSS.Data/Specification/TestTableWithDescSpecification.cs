@@ -1,6 +1,6 @@
-﻿using OSS.Data.Entities;
+using OSS.Data.Entities;
 
-namespace OSS.Services.Specification
+namespace OSS.Data.Specification
 {
     public class TestTableWithDescSpecification : BaseSpecification<TestTable>
     {

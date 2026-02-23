@@ -1,4 +1,4 @@
-﻿namespace OSS.Services
+namespace OSS.Services
 {
     public class QueryExtension
     {

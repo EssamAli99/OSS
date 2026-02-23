@@ -1,4 +1,4 @@
-﻿using OSS.Services.Models;
+using OSS.Services.Models;
 using System.Collections.Generic;
 
 namespace OSS.Web.Areas.Admin.Models
@@ -9,8 +9,8 @@ namespace OSS.Web.Areas.Admin.Models
         {
             AppPages = new List<AppPageModel>();
         }
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
         public List<AppPageModel> AppPages { get; set; }
     }
 }

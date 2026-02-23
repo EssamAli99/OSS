@@ -1,4 +1,4 @@
-﻿using OSS.Data.Entities;
+using OSS.Data.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,7 +7,7 @@ namespace OSS.Services.AppServices
     /// <summary>
     /// Task service interface
     /// </summary>
-    public partial interface IScheduleTaskService
+    public interface IScheduleTaskService
     {
         /// <summary>
         /// Deletes a task

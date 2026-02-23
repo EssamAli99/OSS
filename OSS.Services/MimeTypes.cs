@@ -1,8 +1,8 @@
-﻿namespace OSS.Services
+namespace OSS.Services
 {
     public static class MimeTypes
     {
-        #region application/*
+
 
         /// <summary>
         /// Type
@@ -49,9 +49,9 @@
         /// </summary>
         public static string ApplicationXZipCo => "application/x-zip-co";
 
-        #endregion
 
-        #region image/*
+
+
 
         /// <summary>
         /// Type
@@ -88,9 +88,9 @@
         /// </summary>
         public static string ImageWebp => "image/webp";
 
-        #endregion
 
-        #region text/*
+
+
 
         /// <summary>
         /// Type
@@ -117,6 +117,6 @@
         /// </summary>
         public static string TextXlsx => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-        #endregion
+
     }
 }

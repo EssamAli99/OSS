@@ -1,5 +1,5 @@
-﻿using ClosedXML.Excel;
-using Microsoft.AspNetCore.Mvc.Rendering;
+#nullable disable
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -124,7 +124,7 @@ namespace OSS.Services.ExportImport.Help
             foreach (var prop in _properties.Values)
             {
                 var cell = xlRrow.Cell(prop.PropertyOrderPosition + cellOffset);
-                if (prop.IsDropDownCell )
+                if (prop.IsDropDownCell)
                 {
                     var dropDownElements = prop.GetDropDownElements();
                     if (!dropDownElements.Any())
@@ -257,7 +257,7 @@ namespace OSS.Services.ExportImport.Help
         /// </summary>
         /// <param name="propertyName">Property name</param>
         /// <param name="list">SelectList</param>
-        public void SetSelectList(string propertyName, SelectList list)
+        public void SetSelectList(string propertyName, System.Collections.Generic.List<ExportItem> list)
         {
             var tempProperty = GetProperty(propertyName);
             if (tempProperty != null)

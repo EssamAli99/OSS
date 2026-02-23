@@ -1,4 +1,4 @@
-﻿namespace OSS.Services.ExportImport
+namespace OSS.Services.ExportImport
 {
     public class ExportSpecificationAttribute
     {
@@ -10,7 +10,7 @@
         /// <summary>
         /// Gets or sets the custom value
         /// </summary>
-        public string CustomValue { get; set; }
+        public string CustomValue { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets whether the attribute can be filtered by

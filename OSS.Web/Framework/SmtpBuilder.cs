@@ -1,4 +1,4 @@
-﻿using MailKit.Net.Smtp;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using OSS.Services.AppServices;
 using OSS.Services.Models;
@@ -12,22 +12,22 @@ namespace OSS.Web.Framework
 {
     public class SmtpBuilder : ISmtpBuilder
     {
-        #region Fields
+
 
         private readonly IEmailAccountService _emailAccountService;
 
-        #endregion
 
-        #region Ctor
+
+
 
         public SmtpBuilder(IEmailAccountService emailAccountService)
         {
             _emailAccountService = emailAccountService;
         }
 
-        #endregion
 
-        #region Methods
+
+
 
         public virtual async Task<SmtpClient> BuildAsync(EmailAccountModel emailAccount = null)
         {
@@ -66,13 +66,13 @@ namespace OSS.Web.Framework
             }
         }
 
-        public virtual bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        public virtual bool ValidateServerCertificate(object? sender, X509Certificate? certificate, X509Chain? chain, SslPolicyErrors sslPolicyErrors)
         {
             //By default, server certificate verification is disabled.
             return true;
         }
 
 
-        #endregion
+
     }
 }

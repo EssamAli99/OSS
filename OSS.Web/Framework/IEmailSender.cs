@@ -1,10 +1,10 @@
-﻿using OSS.Services.Models;
+using OSS.Services.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OSS.Web.Framework
 {
-    public partial interface IEmailSender
+    public interface IEmailSender
     {
         /// <summary>
         /// Sends an email

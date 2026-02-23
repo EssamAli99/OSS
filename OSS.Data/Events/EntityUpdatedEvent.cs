@@ -1,18 +1,18 @@
-﻿using OSS.Data;
+using OSS.Data;
 
-namespace OSS.Services.Events
+namespace OSS.Data.Events
 {
     /// <summary>
-    /// A container for entities that have been inserted.
+    /// A container for entities that are updated.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class EntityInsertedEvent<T> : EventBase where T : BaseEntity
+    public class EntityUpdatedEvent<T> : EventBase where T : BaseEntity
     {
         /// <summary>
         /// Ctor
         /// </summary>
         /// <param name="entity">Entity</param>
-        public EntityInsertedEvent(T entity)
+        public EntityUpdatedEvent(T entity)
         {
             Entity = entity;
         }

@@ -1,28 +1,28 @@
-﻿using OSS.Services.AppServices;
+using OSS.Services.AppServices;
 
 namespace OSS.Web.Framework
 {
     /// <summary>
     /// Represents a task to clear [Log] table
     /// </summary>
-    public partial class ClearLogTask : IScheduleTask
+    public class ClearLogTask : IScheduleTask
     {
-        #region Fields
 
-        private readonly ILogger _logger;
 
-        #endregion
+        private readonly ILogService _logger;
 
-        #region Ctor
 
-        public ClearLogTask(ILogger logger)
+
+
+
+        public ClearLogTask(ILogService logger)
         {
             _logger = logger;
         }
 
-        #endregion
 
-        #region Methods
+
+
 
         /// <summary>
         /// Executes a task
@@ -32,6 +32,6 @@ namespace OSS.Web.Framework
             await _logger.ClearLogAsync();
         }
 
-        #endregion
+
     }
 }

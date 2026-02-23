@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace OSS.Services.ExportImport
@@ -6,7 +6,7 @@ namespace OSS.Services.ExportImport
     /// <summary>
     /// Extensions
     /// </summary>
-    public static partial class Extensions
+    public static class Extensions
     {
         /// <summary>
         /// Write string async

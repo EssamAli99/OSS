@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -23,7 +23,8 @@ namespace OSS.Web.Mvc.Filters
                 var p = context.HttpContext.User.Claims.Where(x => x.Type.Equals(controllerName)).FirstOrDefault();
                 if (p != null)
                 {
-                    string id = OSSConfig.Permissions.Where(x => x.ActionName.Equals(actionName)).Select(x => x.Id).FirstOrDefault();
+                    var permissionProvider = context.HttpContext.RequestServices.GetService(typeof(IPermissionProvider)) as IPermissionProvider;
+                    string id = permissionProvider?.GetPermissions().Where(x => x.ActionName.Equals(actionName)).Select(x => x.Id).FirstOrDefault();
                     if (!string.IsNullOrEmpty(id) && p.Value.Contains(id)) allowed = true;
                 }
                 if (!allowed)

@@ -1,4 +1,4 @@
-﻿using OSS.Data.Entities;
+using OSS.Data.Entities;
 using OSS.Services.AppServices;
 using OSS.Services.Models;
 using System;
@@ -13,9 +13,9 @@ namespace OSS.Web.Framework
     /// Represents task thread
     /// </summary>
     /// <returns>A task that represents the asynchronous operation</returns>
-    public partial class TaskThread : IDisposable
+    public class TaskThread : IDisposable
     {
-        #region Fields
+
 
         private readonly string _scheduleTaskUrl;
         private readonly int? _timeout;
@@ -23,12 +23,12 @@ namespace OSS.Web.Framework
         private Timer _timer;
         private bool _disposed;
         private readonly IHttpClientFactory _httpClient;
-        private readonly ILogger _logger;
-        #endregion
+        private readonly ILogService _logger;
 
-        #region Ctor
 
-        internal TaskThread(IHttpClientFactory client, ILogger logger, int seconds)
+
+
+        internal TaskThread(IHttpClientFactory client, ILogService logger, int seconds)
         {
             //Seconds = 10 * 60; //for testing
             _tasks = new Dictionary<string, string>();
@@ -42,9 +42,9 @@ namespace OSS.Web.Framework
             this.Seconds = seconds;
         }
 
-        #endregion
 
-        #region Utilities
+
+
 
         private async Task RunAsync()
         {
@@ -74,7 +74,7 @@ namespace OSS.Web.Framework
                     // var serviceScopeFactory = EngineContext.Current.Resolve<IServiceScopeFactory>();
                     // using var scope = serviceScopeFactory.CreateScope();
                     // Resolve
-                    //var logger = _context.HttpContext.RequestServices.GetService(typeof(ILogger)) as ILogger; //EngineContext.Current.Resolve<ILogger>(scope);
+                    //var logger = _context.HttpContext.RequestServices.GetService(typeof(ILogService)) as ILogService; //EngineContext.Current.Resolve<ILogService>(scope);
                     //var localizationService = _context.HttpContext.RequestServices.GetService(typeof(ILocalizationService)) as ILocalizationService; // EngineContext.Current.Resolve<ILocalizationService>(scope);
                     //var webHelper = _context.HttpContext.RequestServices.GetService(typeof(IWebHelper)) as IWebHelper; //webHelper;
                     var message = ex.InnerException?.GetType() == typeof(TaskCanceledException) ? "ScheduleTasks TimeoutError" : ex.Message;
@@ -126,9 +126,9 @@ namespace OSS.Web.Framework
             }
         }
 
-        #endregion
 
-        #region Methods
+
+
 
         /// <summary>
         /// Disposes the instance
@@ -171,9 +171,9 @@ namespace OSS.Web.Framework
                 _tasks.Add(task.Name, task.Type);
         }
 
-        #endregion
 
-        #region Properties
+
+
 
         /// <summary>
         /// Gets or sets the interval in seconds at which to run the tasks
@@ -230,6 +230,6 @@ namespace OSS.Web.Framework
         /// </summary>
         public bool RunOnlyOnce { get; set; }
 
-        #endregion
+
     }
 }
